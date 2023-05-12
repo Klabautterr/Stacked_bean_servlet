@@ -26,6 +26,7 @@ public class das_ist_nur_ein_test extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		//okay kann das gelesen werden 
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 

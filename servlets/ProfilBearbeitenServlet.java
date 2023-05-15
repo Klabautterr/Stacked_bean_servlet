@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-import stacked.Stacked_bean_servlet.bean.Login;
+import stacked_bs.bean.Login;
 
 /**
  * Servlet implementation class ProfilBearbeitenServlet

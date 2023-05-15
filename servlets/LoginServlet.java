@@ -1,4 +1,4 @@
-package stacked.servlets;
+package stacked.Stacked_bean_servlet.servlets;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import stacked.bean.Login;
+import stacked.Stacked_bean_servlet.bean.Login;
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -41,7 +41,7 @@ public class LoginServlet extends HttpServlet {
 	 *      response)
 	 */
 
-	private boolean Nutzer√ºberpr√ºfen(Login form) throws ServletException, SQLException {
+	private boolean Nutzer‹berpr¸fen(Login form) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();
 				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM user Where BINARY username = ? AND BINARY password = ?")) {
 
@@ -61,7 +61,7 @@ public class LoginServlet extends HttpServlet {
 
 	}
 
-	private boolean Benutzername√úberpr√ºfen(Login form) throws ServletException, SQLException {
+	private boolean Benutzername‹berpr¸fen(Login form) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();
 				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM user Where BINARY username = ?")) {
 
@@ -91,10 +91,10 @@ public class LoginServlet extends HttpServlet {
 		session.setAttribute("Login", form);
 
 		try {
-			if (Nutzer√ºberpr√ºfen(form)) {
+			if (Nutzer‹berpr¸fen(form)) {
 				response.sendRedirect("Stacked/JSP/Profil.jsp");
 			} else {
-				if (Benutzername√úberpr√ºfen(form)) {
+				if (Benutzername‹berpr¸fen(form)) {
 					response.sendRedirect("Stacked/JSP/PasswortFalsch.jsp");
 				} else {
 					response.sendRedirect("Stacked/JSP/BenutzernameFalsch.jsp");

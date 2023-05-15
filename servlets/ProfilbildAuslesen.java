@@ -1,4 +1,4 @@
-package stacked.servlets;
+package stacked.Stacked_bean_servlet.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,8 +17,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import stacked.bean.Login;
-import stacked.bean.Registrierung;
+import stacked.Stacked_bean_servlet.bean.Login;
+import stacked.Stacked_bean_servlet.bean.Registrierung;
 
 /**
  * Servlet implementation class PostAuslesen

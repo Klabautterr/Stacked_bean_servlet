@@ -1,4 +1,4 @@
-package stacked.Stacked_bean_servlet.servlets;
+package stacked_bs.servlets;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -67,7 +67,7 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		update(form,filepart,AlterUsername);
 		response.sendRedirect("Stacked/JSP/ProfilBearbeiten.jsp");}
 	
-	// Muss ich noch verbessern - Mit if Statements das mann auch nur ein einzelnes ändern könnte. 
+	// Muss ich noch verbessern - Mit if Statements das mann auch nur ein einzelnes ï¿½ndern kï¿½nnte. 
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

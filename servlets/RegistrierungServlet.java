@@ -1,4 +1,4 @@
-package stacked.Stacked_bean_servlet.servlets;
+package stacked_bs.servlets;
 
 
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 
 import javax.sql.DataSource;
 
-import stacked.Stacked_bean_servlet.bean.Registrierung;
+import stacked_bs.bean.Registrierung;
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;

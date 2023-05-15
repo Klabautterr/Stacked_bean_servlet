@@ -1,4 +1,4 @@
-package stacked.Stacked_bean_servlet.servlets;
+package stacked_bs.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;

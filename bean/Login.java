@@ -1,4 +1,4 @@
-package stacked.Stacked_bean_servlet.bean;
+package stacked_bs.bean;
 
 import java.io.Serializable;
 

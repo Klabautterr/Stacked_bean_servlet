@@ -1,6 +1,6 @@
-package stacked.Stacked_bean_servlet.servlets;
+package stacked_bs.servlets;
 
-import stacked.Stacked_bean_servlet.bean.Post;
+import stacked_bs.bean.Post;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

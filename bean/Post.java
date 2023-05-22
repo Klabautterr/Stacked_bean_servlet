@@ -9,9 +9,16 @@ public class Post implements Serializable{
 	private String username;
 	private String nachricht;
 	private String link;
+	private boolean loeschen;
 	private String bildname;
 	private byte[] bild;
 	
+	public boolean isLöschen() {
+		return loeschen;
+	}
+	public void setLöschen(boolean löschen) {
+		this.loeschen = löschen;
+	}
 	public Long getId() {
 		return id;
 	}

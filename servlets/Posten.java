@@ -1,11 +1,13 @@
 package stacked_bs.servlets;
 
+import java.util.ArrayList;
+import stacked_bs.bean.Login;
 import stacked_bs.bean.Post;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -33,17 +35,18 @@ public class Posten extends HttpServlet {
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
-    	private void persist(Post form, Part filepart) throws ServletException {
+    	private void ein_Post(Post form, Part filepart) throws ServletException {
     	
     	String[] DataInfo = new String[] {"id"};
     	
     	try (Connection con = ds.getConnection();
     			
     		PreparedStatement pstmt = con.prepareStatement(
-    		"INSERT INTO post (nachricht, bildname, bild) Values(?, ?, ?)", DataInfo)) {
+    		"INSERT INTO post (nachricht, username, bildname, bild) Values(?, ?, ?, ?)", DataInfo)) {
     		pstmt.setString(1, form.getNachricht());
-    		pstmt.setString(2, form.getBildname());
-    		pstmt.setBinaryStream(3, filepart.getInputStream());
+    		pstmt.setString(2, form.getUsername());
+    		pstmt.setString(3, form.getBildname());
+    		pstmt.setBinaryStream(4, filepart.getInputStream());
     		pstmt.executeUpdate();
     	
     	try(ResultSet rs = pstmt.getGeneratedKeys()) {
@@ -55,7 +58,15 @@ public class Posten extends HttpServlet {
     		throw new ServletException(ex.getMessage());
     	}
     }
-	
+	private void loesche_Post(Long id) throws ServletException {
+		try (Connection con = ds.getConnection();
+			PreparedStatement pstmt = con.prepareStatement("DELETE FROM post Where id = ?")){
+				pstmt.setLong(1, id);
+				pstmt.executeUpdate();
+			} catch (Exception ex) {
+				throw new ServletException(ex.getMessage());
+			}
+	}
 	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -64,21 +75,29 @@ public class Posten extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-
+		
+		HttpSession session = request.getSession();
+		Login login = (Login) session.getAttribute("Login");
+		
+		//if loeschen = false{
 		Post form = new Post();
-		//form.setUsername(request.getParameter("username"));
+		form.setUsername(login.getUsername());
 		form.setNachricht(request.getParameter("nachricht"));
 		// form.setLink(request.getParameter("linke"));
-		form.setBildname(request.getParameter("bildname"));
+		
 		
 		
 		Part filepart = request.getPart("bild");
 		form.setBildname(filepart.getSubmittedFileName());
 	
+		
 
-		HttpSession session = request.getSession();
 		session.setAttribute("form", form);
-		persist(form, filepart);
+		ein_Post( form, filepart);
+		//}
+		//else {
+			
+		//}
 		response.sendRedirect("Stacked/JSP/OutputFeed.jsp");
 
 	}

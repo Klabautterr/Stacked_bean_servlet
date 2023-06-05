@@ -58,15 +58,10 @@ public class Posten extends HttpServlet {
     		throw new ServletException(ex.getMessage());
     	}
     }
-	private void loesche_Post(Long id) throws ServletException {
-		try (Connection con = ds.getConnection();
-			PreparedStatement pstmt = con.prepareStatement("DELETE FROM post Where id = ?")){
-				pstmt.setLong(1, id);
-				pstmt.executeUpdate();
-			} catch (Exception ex) {
-				throw new ServletException(ex.getMessage());
-			}
-	}
+    
+
+
+
 	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -78,15 +73,13 @@ public class Posten extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		Login login = (Login) session.getAttribute("Login");
+	
 		
-		//if loeschen = false{
 		Post form = new Post();
 		form.setUsername(login.getUsername());
 		form.setNachricht(request.getParameter("nachricht"));
-		// form.setLink(request.getParameter("linke"));
-		
-		
-		
+	
+			
 		Part filepart = request.getPart("bild");
 		form.setBildname(filepart.getSubmittedFileName());
 	
@@ -94,10 +87,8 @@ public class Posten extends HttpServlet {
 
 		session.setAttribute("form", form);
 		ein_Post( form, filepart);
-		//}
-		//else {
-			
-		//}
+
+		
 		response.sendRedirect("Stacked/JSP/OutputFeed.jsp");
 
 	}

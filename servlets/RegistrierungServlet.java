@@ -4,6 +4,8 @@ package stacked_bs.servlets;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
@@ -54,6 +56,25 @@ public class RegistrierungServlet extends HttpServlet {
     	}
     }
     
+	private boolean Benutzernameueberpruefen(Registrierung form) throws ServletException, SQLException {
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM user Where BINARY username = ?")) {
+
+			pstmt.setString(1, form.getUsername());
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		} catch (Exception ex) {
+			throw new ServletException(ex.getMessage());
+		}
+
+	}
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		Registrierung form = new Registrierung();
@@ -63,9 +84,25 @@ public class RegistrierungServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		session.setAttribute("Registrierung", form);
-		persist(form,filepart);
-		response.sendRedirect("Stacked/Index.html");
-	
+		
+
+
+		
+		try {
+			if (Benutzernameueberpruefen(form)) {
+				persist(form,filepart);
+				response.sendRedirect("Stacked/Index.html");;
+			} else {
+					response.sendRedirect("Stacked/JSP/BenutzernameVorhanden.jsp");
+				}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

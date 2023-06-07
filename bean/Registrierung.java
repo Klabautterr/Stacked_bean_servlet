@@ -8,6 +8,7 @@ public class Registrierung implements Serializable{
 	private String username;
 	private String passwort;
 	
+
 	public String getUsername() {
 		return username;
 	}

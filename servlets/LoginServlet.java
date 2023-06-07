@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+// Jonathan Vielwerth
 
 /**
  * Servlet implementation class LoginServlet
@@ -43,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 
 	private boolean Nutzerueberpruefen(Login form) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM user Where BINARY username = ? AND BINARY password = ?")) {
+				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM user Where BINARY username = ? AND BINARY passwort = ?")) {
 
 			pstmt.setString(1, form.getUsername());
 			pstmt.setString(2, form.getPasswort());
@@ -79,6 +80,25 @@ public class LoginServlet extends HttpServlet {
 		}
 
 	}
+	
+	private boolean Adminueberpruefen(Login form) throws ServletException, SQLException{
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM user Where BINARY username = ? AND admin = true")) {
+
+			pstmt.setString(1, form.getUsername());
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} catch (Exception ex) {
+			throw new ServletException(ex.getMessage());
+		}
+		
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -92,7 +112,11 @@ public class LoginServlet extends HttpServlet {
 
 		try {
 			if (Nutzerueberpruefen(form)) {
-				response.sendRedirect("Stacked/JSP/Profil.jsp");
+				if(Adminueberpruefen(form)) {
+					response.sendRedirect("Stacked/JSP/Admin.jsp");
+				}else{
+					response.sendRedirect("Stacked/JSP/Profil.jsp");
+				}
 			} else {
 				if (Benutzernameueberpruefen(form)) {
 					response.sendRedirect("Stacked/JSP/PasswortFalsch.jsp");
@@ -124,3 +148,4 @@ public class LoginServlet extends HttpServlet {
 	}
 
 }
+// Jonathan Vielwerth

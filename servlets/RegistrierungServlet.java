@@ -23,12 +23,16 @@ import jakarta.servlet.http.Part;
 /**
  * Servlet implementation class RegistrierungServlet
  */
+// Jonathan Vielwerth
+
 @WebServlet("/RegistrierungServlet")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 5,
-				 maxRequestSize = 1024 * 1024 * 5 * 5)
+				 maxRequestSize = 1024 * 1024 * 5 * 5,
+				 location="C:\\wildfly-preview-26.1.3.Final\\standalone\\tmp\\Stacked-war.war\\tmp\\",
+				 fileSizeThreshold = 1024* 1024)
 public class RegistrierungServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 	
@@ -45,7 +49,7 @@ public class RegistrierungServlet extends HttpServlet {
     
     private void persist(Registrierung form, Part filepart) throws ServletException{
     	try(Connection con = ds.getConnection();
-    			PreparedStatement pstmt = con.prepareStatement("INSERT INTO user (username,password,userImage) Values(?,?,?)")){
+    			PreparedStatement pstmt = con.prepareStatement("INSERT INTO user (username,passwort,userImage) Values(?,?,?)")){
     		pstmt.setString(1, form.getUsername());
     		pstmt.setString(2, form.getPasswort());
     		pstmt.setBinaryStream(3, filepart.getInputStream());;
@@ -114,3 +118,5 @@ public class RegistrierungServlet extends HttpServlet {
 	}
 
 }
+// Jonathan Vielwerth
+

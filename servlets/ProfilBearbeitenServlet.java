@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import stacked_bs.bean.Login;
+// Jonathan Vielwerth
 
 /**
  * Servlet implementation class ProfilBearbeitenServlet
@@ -41,7 +42,7 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		if (!form.getUsername().equals("") & !form.getPasswort().equals("") & filepart.getSize() != 0) {
 			try (Connection con = ds.getConnection();
 					PreparedStatement pstmt = con.prepareStatement(
-							"UPDATE thidb.user SET username = ?, password = ?, userImage = ? Where username = ?")) {
+							"UPDATE thidb.user SET username = ?, passwort = ?, userImage = ? Where username = ?")) {
 				pstmt.setString(1, form.getUsername());
 				pstmt.setString(2, form.getPasswort());
 				pstmt.setBinaryStream(3, filepart.getInputStream());
@@ -69,7 +70,7 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		}
 		if (form.getUsername().equals("") & !form.getPasswort().equals("") & filepart.getSize() == 0) {
 			try (Connection con = ds.getConnection();
-					PreparedStatement pstmt = con.prepareStatement("UPDATE thidb.user SET password = ? Where username = ?")) {
+					PreparedStatement pstmt = con.prepareStatement("UPDATE thidb.user SET passwort = ? Where username = ?")) {
 				pstmt.setString(1, form.getPasswort());
 				pstmt.setString(2, AlterUsername);
 
@@ -98,7 +99,7 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		
 		if (!form.getUsername().equals("") & !form.getPasswort().equals("") & filepart.getSize() == 0) {
 			try (Connection con = ds.getConnection();
-					PreparedStatement pstmt = con.prepareStatement("UPDATE thidb.user SET username = ?, password = ? Where username = ?")) {
+					PreparedStatement pstmt = con.prepareStatement("UPDATE thidb.user SET username = ?, passwort = ? Where username = ?")) {
 				pstmt.setString(1, form.getUsername());
 				pstmt.setString(2, form.getPasswort());
 				pstmt.setString(3, AlterUsername);
@@ -128,7 +129,7 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		}
 		if (form.getUsername().equals("") & !form.getPasswort().equals("") & filepart.getSize() != 0) {
 			try (Connection con = ds.getConnection();
-					PreparedStatement pstmt = con.prepareStatement("UPDATE user SET password = ?, userImage = ? Where username = ?")) {
+					PreparedStatement pstmt = con.prepareStatement("UPDATE user SET passwort = ?, userImage = ? Where username = ?")) {
 				pstmt.setString(1, form.getPasswort());
 				pstmt.setBinaryStream(2, filepart.getInputStream());
 				;
@@ -214,3 +215,4 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 	}
 
 }
+// Jonathan Vielwerth

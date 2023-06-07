@@ -27,7 +27,7 @@ import jakarta.servlet.http.Part;
 @WebServlet("/Posten")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 5, 
 				maxRequestSize = 1024 * 1024 * 5 * 5,
-				location = "/tmp", 
+				location = "/standalone/data/tmp", 
 				fileSizeThreshold = 1024 * 1024)
 public class Posten extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -35,7 +35,7 @@ public class Posten extends HttpServlet {
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
-    	private void ein_Post(Post form, Part filepart) throws ServletException {
+    	private void ein_Post(Post formPost, Part filepart) throws ServletException {
     	
     	String[] DataInfo = new String[] {"id"};
     	
@@ -43,15 +43,15 @@ public class Posten extends HttpServlet {
     			
     		PreparedStatement pstmt = con.prepareStatement(
     		"INSERT INTO post (nachricht, username, bildname, bild) Values(?, ?, ?, ?)", DataInfo)) {
-    		pstmt.setString(1, form.getNachricht());
-    		pstmt.setString(2, form.getUsername());
-    		pstmt.setString(3, form.getBildname());
+    		pstmt.setString(1, formPost.getNachricht());
+    		pstmt.setString(2, formPost.getUsername());
+    		pstmt.setString(3, formPost.getBildname());
     		pstmt.setBinaryStream(4, filepart.getInputStream());
     		pstmt.executeUpdate();
     	
     	try(ResultSet rs = pstmt.getGeneratedKeys()) {
     		while (rs.next()) {
-    			form.setId(rs.getLong(1));
+    			formPost.setId(rs.getLong(1));
     		}	
     	}
     	}catch (Exception ex) {
@@ -75,18 +75,20 @@ public class Posten extends HttpServlet {
 		Login login = (Login) session.getAttribute("Login");
 	
 		
-		Post form = new Post();
-		form.setUsername(login.getUsername());
-		form.setNachricht(request.getParameter("nachricht"));
+		
+		Post formPost = new Post();
+		formPost.setUsername(login.getUsername());
+		formPost.setNachricht(request.getParameter("nachricht"));
 	
 			
 		Part filepart = request.getPart("bild");
-		form.setBildname(filepart.getSubmittedFileName());
+		formPost.setBildname(filepart.getSubmittedFileName());
 	
 		
 
-		session.setAttribute("form", form);
-		ein_Post( form, filepart);
+		session.setAttribute("formPost", formPost);
+		ein_Post(formPost, filepart);
+
 
 		
 		response.sendRedirect("Stacked/JSP/OutputFeed.jsp");

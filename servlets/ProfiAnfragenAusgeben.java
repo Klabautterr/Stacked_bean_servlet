@@ -16,19 +16,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import stacked_bs.bean.Registrierung;
+import stacked_bs.bean.Profi;
 // Jonathan Vielwerth
 /**
  * Servlet implementation class RegistrierungsanfragenAusgeben
  */
-@WebServlet("/RegistrierungsanfragenAusgeben")
-public class RegistrierungsanfragenAusgeben extends HttpServlet {
+@WebServlet("/ProfiAnfragenAusgeben")
+public class ProfiAnfragenAusgeben extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor. 
      */
-    public RegistrierungsanfragenAusgeben() {
+    public ProfiAnfragenAusgeben() {
         // TODO Auto-generated constructor stub
     }
 
@@ -39,40 +39,39 @@ public class RegistrierungsanfragenAusgeben extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	
-	private List<Registrierung> registrierungsanfragenAusgeben() throws ServletException {
+	private List<Profi> ProfiAnfragenAuslesen() throws ServletException {
 
-	    List<Registrierung> registrierungsanfragen = new ArrayList<>();
+	    List<Profi> profiAnfragen = new ArrayList<>();
 
 	    try (Connection con = ds.getConnection();
-	         PreparedStatement pstmt = con.prepareStatement("SELECT username, passwort FROM thidb.user WHERE offeneRegistrierungsanfrage = true")) {
+	         PreparedStatement pstmt = con.prepareStatement("SELECT username, passwort FROM thidb.user WHERE offeneProfiAnfrage = true")) {
 // UserImage muss noch hinzugefügt werden
 	        try (ResultSet rs = pstmt.executeQuery()) {
 
 	            while (rs.next()) {
-	                Registrierung registrierung = new Registrierung();
-	                registrierung.setUsername(rs.getString("username"));
-	                registrierung.setPasswort(rs.getString("passwort"));
+	                Profi profiAnfrage = new Profi();
+	                profiAnfrage.setUsername(rs.getString("username"));
 
-	                registrierungsanfragen.add(registrierung);
+	                profiAnfragen.add(profiAnfrage);
 	            } 
 	        }
 	    } catch (Exception ex) {
 	        throw new ServletException(ex.getMessage());
 	    }
 	    
-	    return registrierungsanfragen;
+	    return profiAnfragen;
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");   // In diesem Format erwartet das Servlet jetzt die Formulardaten
 		    
 		// DB-Zugriff
-		List<Registrierung> registrierungsanfragen = registrierungsanfragenAusgeben();
+		List<Profi> profiAnfragen = ProfiAnfragenAuslesen();
 		            
 		// Scope "Request"
-		request.setAttribute("registrierungsanfragen", registrierungsanfragen);
+		request.setAttribute("profiAnfragen", profiAnfragen);
 		    
 		// Weiterleiten an JSP
-		final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Registrierungsanfragen.jsp");
+		final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/ProfiAnfragen.jsp");
 		dispatcher.forward(request, response);  
 		}
 	

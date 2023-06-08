@@ -69,7 +69,7 @@ public class ProfiAnfragenAusgeben extends HttpServlet {
 		            
 		// Scope "Request"
 		request.setAttribute("profiAnfragen", profiAnfragen);
-		    
+
 		// Weiterleiten an JSP
 		final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/ProfiAnfragen.jsp");
 		dispatcher.forward(request, response);  

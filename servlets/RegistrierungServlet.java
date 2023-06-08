@@ -55,7 +55,7 @@ public class RegistrierungServlet extends HttpServlet {
     		pstmt.setBinaryStream(3, filepart.getInputStream());;
     		pstmt.executeUpdate();
     		
-    	}catch (Exception ex) {
+    	}catch (Exception ex) {	
     		throw new ServletException(ex.getMessage());
     	}
     }

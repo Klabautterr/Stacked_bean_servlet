@@ -99,6 +99,24 @@ public class LoginServlet extends HttpServlet {
 		}
 		
 	}
+	
+	private boolean Profiueberpruefung(Login form) throws ServletException, SQLException{
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM user Where BINARY username = ? AND profi = true")) {
+
+			pstmt.setString(1, form.getUsername());
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} catch (Exception ex) {
+			throw new ServletException(ex.getMessage());
+		}
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -114,7 +132,10 @@ public class LoginServlet extends HttpServlet {
 			if (Nutzerueberpruefen(form)) {
 				if(Adminueberpruefen(form)) {
 					response.sendRedirect("Stacked/JSP/Admin.jsp");
-				}else{
+				}else if(Profiueberpruefung(form)){
+					response.sendRedirect("Stacked/JSP/Profi.jsp");
+				}
+				else{
 					response.sendRedirect("Stacked/JSP/Profil.jsp");
 				}
 			} else {

@@ -1,21 +1,28 @@
 package stacked_bs.servlets;
 
 import java.io.IOException;
+
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
 import javax.sql.DataSource;
+
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-// Jonathan 
+import jakarta.servlet.http.HttpSession;
+import stacked_bs.bean.Login;
+
+
 /**
- * Servlet implementation class ProfilanfrageAnnehmen
+ * Servlet implementation class ProfiAnfrageStellen
  */
-@WebServlet("/ProfiAnfrageAnnehmen")
-public class ProfiAnfrageAnnehmen extends HttpServlet {
+@WebServlet("/ProfiAnfrageStellen")
+public class ProfiAnfrageStellen extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
@@ -23,25 +30,14 @@ public class ProfiAnfrageAnnehmen extends HttpServlet {
     /**
      * Default constructor. 
      */
-	
-    public ProfiAnfrageAnnehmen() {
+    public ProfiAnfrageStellen() {
         // TODO Auto-generated constructor stub
     }
-	
-    public void persist(String username) throws ServletException {
-    	try(Connection con = ds.getConnection();
-    			PreparedStatement pstmt = con.prepareStatement("Update thidb.user Set profi = true where username = ?")){
-    		pstmt.setString(1, username);
-    		
-    		pstmt.executeUpdate();
 
-    		
-    	}catch (Exception ex) {
-    		throw new ServletException(ex.getMessage());
-    	}
+    public void persist(Login login) throws ServletException {
     	try(Connection con = ds.getConnection();
-    			PreparedStatement pstmt = con.prepareStatement("Update thidb.user Set offeneProfiAnfrage = false where username = ?")){
-    		pstmt.setString(1, username);
+    			PreparedStatement pstmt = con.prepareStatement("Update thidb.user Set offeneProfiAnfrage = true where username = ?")){
+    		pstmt.setString(1, login.getUsername());
     		
     		pstmt.executeUpdate();
 
@@ -50,19 +46,17 @@ public class ProfiAnfrageAnnehmen extends HttpServlet {
     		throw new ServletException(ex.getMessage());
     	}
     }
-
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		HttpSession session = request.getSession();
+		Login login = (Login) session.getAttribute("Login");
 		
-		String username = request.getParameter("username");
-		
-		persist(username);
+		persist(login);
 
-		response.sendRedirect("./ProfiAnfragenAusgeben");
-		
+		response.sendRedirect("./Stacked/JSP/ProfilBearbeiten.jsp");
 	}
 
 	/**
@@ -74,4 +68,3 @@ public class ProfiAnfrageAnnehmen extends HttpServlet {
 	}
 
 }
-//Jonathan

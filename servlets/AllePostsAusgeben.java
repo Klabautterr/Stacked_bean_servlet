@@ -70,13 +70,12 @@ public class AllePostsAusgeben extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");   
 		
 		// DB-Zugriff
-		List<Post> posts = search(3L);
+		List<Post> posts = search(5L);
 		            
 		// Scope "Request"
 		request.setAttribute("posts", posts);
 		    
 		// Weiterleiten an JSP
-		//response.sendRedirect("Stacked/JSP/FeedPosts.jsp");
 		final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/FeedPosts.jsp");
 		dispatcher.forward(request, response);
 		}

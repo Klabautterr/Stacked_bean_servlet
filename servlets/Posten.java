@@ -91,7 +91,7 @@ public class Posten extends HttpServlet {
 
 
 		
-		response.sendRedirect("Stacked/JSP/OutputFeed.jsp");
+		response.sendRedirect("./AllePostsAusgeben");
 
 	}
 

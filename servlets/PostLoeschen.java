@@ -63,9 +63,9 @@ public class PostLoeschen extends HttpServlet {
 			loeschen(id, username);
 			
 
-			session.setAttribute("formPost", null);
+			//session.setAttribute("formPost", null);
 
-		response.sendRedirect("Stacked/JSP/OutputFeed.jsp");
+		response.sendRedirect("./AllePostsAusgeben");
 		
 	}
 

@@ -40,11 +40,11 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 	private void persist(Assets assets) throws ServletException {
 
 		try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con.prepareStatement("INSERT INTO thidb.investments (stockname, anzahl, buyin) VALUES(?,?,?)")) {
-			// pstmt.setString(1, username.getUsername());
-			pstmt.setString(1, assets.getStockname());
-			pstmt.setInt(2, assets.getAnzahl());
-			 pstmt.setInt(3, assets.getBuyin());
+				PreparedStatement pstmt = con.prepareStatement("INSERT INTO thidb.investments (username,stockname, anzahl, buyin) VALUES(?,?,?,?)")) {
+			pstmt.setString(1, assets.getUsername());
+			pstmt.setString(2, assets.getStockname());
+			pstmt.setInt(3, assets.getAnzahl());
+			 pstmt.setInt(4, assets.getBuyin());
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -62,12 +62,14 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 
 		request.setCharacterEncoding("UTF-8");
 
+		HttpSession session = request.getSession();
 		Assets assets = new Assets();
-		// assets.setUsername(request.getParameter("username"));
+		Login login = (Login) session.getAttribute("Login");
+		assets.setUsername(login.getUsername());
 		assets.setStockname(request.getParameter("stockname"));
 		assets.setAnzahl(Integer.valueOf(request.getParameter("amountOfStock")));
 		assets.setBuyin(Integer.valueOf(request.getParameter("buyIn")));
-		HttpSession session = request.getSession();
+		
 		session.setAttribute("Assets", assets);
 		persist(assets);
 

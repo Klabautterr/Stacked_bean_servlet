@@ -42,7 +42,7 @@ public class Posten extends HttpServlet {
     	try (Connection con = ds.getConnection();
     			
     		PreparedStatement pstmt = con.prepareStatement(
-    		"INSERT INTO post (nachricht, username, bildname, bild) Values(?, ?, ?, ?)", DataInfo)) {
+    		"INSERT INTO post (nachricht, username, bildname, bild, anzahl_likes) Values(?, ?, ?, ?, 0)", DataInfo)) {
     		pstmt.setString(1, formPost.getNachricht());
     		pstmt.setString(2, formPost.getUsername());
     		pstmt.setString(3, formPost.getBildname());

@@ -11,8 +11,16 @@ public class Post implements Serializable{
 	private String link;
 	private String loeschen;
 	private String bildname;
+	private Integer anzahl_likes;
 	private byte[] bild;
 	
+	
+	public Integer getAnzahl_likes() {
+		return anzahl_likes;
+	}
+	public void setAnzahl_likes(Integer anzahl_likes) {
+		this.anzahl_likes = anzahl_likes;
+	}
 	public String isLoeschen() {
 		return loeschen;
 	}

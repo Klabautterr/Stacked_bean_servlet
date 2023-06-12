@@ -65,6 +65,7 @@ public class PostLoeschen extends HttpServlet {
 
 			//session.setAttribute("formPost", null);
 
+			// sendet an das ausgaben Servelt 
 		response.sendRedirect("./AllePostsAusgeben");
 		
 	}

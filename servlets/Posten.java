@@ -40,7 +40,7 @@ public class Posten extends HttpServlet {
     	String[] DataInfo = new String[] {"id"};
     	
     	try (Connection con = ds.getConnection();
-    			
+    			// schreibt die Daten in die DAtenbank 
     		PreparedStatement pstmt = con.prepareStatement(
     		"INSERT INTO post (nachricht, username, bildname, bild, anzahl_likes) Values(?, ?, ?, ?, 0)", DataInfo)) {
     		pstmt.setString(1, formPost.getNachricht());
@@ -70,12 +70,12 @@ public class Posten extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		
+		//zieht die daten aus der Login session
 		HttpSession session = request.getSession();
 		Login login = (Login) session.getAttribute("Login");
 	
 		
-		
+		//holt die Daten aus der JSP und erstellt eine object bean
 		Post formPost = new Post();
 		formPost.setUsername(login.getUsername());
 		formPost.setNachricht(request.getParameter("nachricht"));

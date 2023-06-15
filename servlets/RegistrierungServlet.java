@@ -28,7 +28,7 @@ import jakarta.servlet.http.Part;
 @WebServlet("/RegistrierungServlet")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 5,
 				 maxRequestSize = 1024 * 1024 * 5 * 5,
-				 location="C:\\wildfly-preview-26.1.3.Final\\standalone\\tmp\\Stacked-war.war\\tmp\\",
+				 location="/tmp",
 				 fileSizeThreshold = 1024* 1024)
 public class RegistrierungServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -40,11 +42,12 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 	private void persist(Assets assets) throws ServletException {
 
 		try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con.prepareStatement("INSERT INTO thidb.investments (username,stockname, anzahl, buyin) VALUES(?,?,?,?)")) {
+				PreparedStatement pstmt = con.prepareStatement(
+						"INSERT INTO thidb.investments (username,stockname, anzahl, buyin) VALUES(?,?,?,?)")) {
 			pstmt.setString(1, assets.getUsername());
 			pstmt.setString(2, assets.getStockname());
 			pstmt.setInt(3, assets.getAnzahl());
-			 pstmt.setInt(4, assets.getBuyin());
+			pstmt.setInt(4, assets.getBuyin());
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -65,11 +68,12 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 		HttpSession session = request.getSession();
 		Assets assets = new Assets();
 		Login login = (Login) session.getAttribute("Login");
+
 		assets.setUsername(login.getUsername());
 		assets.setStockname(request.getParameter("stockname"));
 		assets.setAnzahl(Integer.valueOf(request.getParameter("amountOfStock")));
 		assets.setBuyin(Integer.valueOf(request.getParameter("buyIn")));
-		
+
 		session.setAttribute("Assets", assets);
 		persist(assets);
 

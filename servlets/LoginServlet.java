@@ -136,7 +136,7 @@ public class LoginServlet extends HttpServlet {
 					response.sendRedirect("Stacked/JSP/Profi.jsp");
 				}
 				else{
-					response.sendRedirect("Stacked/JSP/Profil.jsp");
+					response.sendRedirect("./InvestmentsAnzeigenServlet");
 				}
 			} else {
 				if (Benutzernameueberpruefen(form)) {

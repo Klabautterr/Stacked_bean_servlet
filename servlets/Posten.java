@@ -27,7 +27,7 @@ import jakarta.servlet.http.Part;
 @WebServlet("/Posten")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 5, 
 				maxRequestSize = 1024 * 1024 * 5 * 5,
-				location = "/standalone/data/tmp", 
+				location = "/tmp", 
 				fileSizeThreshold = 1024 * 1024)
 public class Posten extends HttpServlet {
 	private static final long serialVersionUID = 1L;

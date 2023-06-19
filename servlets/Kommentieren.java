@@ -30,23 +30,24 @@ public class Kommentieren extends HttpServlet {
 	private DataSource ds;
 	
 	
-		private void ein_Kommentar(Kommentar formPost) throws ServletException {
+		private void ein_Kommentar(Kommentar einKommentar) throws ServletException {
     	
     	String[] DataInfo = new String[] {"id"};
     	
     	try (Connection con = ds.getConnection();
     			// schreibt die Daten in die DAtenbank 
     		PreparedStatement pstmt = con.prepareStatement(
-    		"INSERT INTO Kommentar (kommentar, username) Values(?, ?)", DataInfo)) {
-    		pstmt.setString(1, formPost.getKommentar());
-    		pstmt.setString(2, formPost.getUsername());
-    		//pstmt.setString(3, formPost.getBildname());
+    		"INSERT INTO thidb.Kommentare (post_id, kommentar, username) Values(?, ?, ?)", DataInfo)) {
+    		pstmt.setLong(1, einKommentar.getPost_id());
+    		pstmt.setString(2, einKommentar.getKommentar());
+    		pstmt.setString(3, einKommentar.getUsername());
+    		
     		//pstmt.setBinaryStream(4, filepart.getInputStream());
     		pstmt.executeUpdate();
     	
     	try(ResultSet rs = pstmt.getGeneratedKeys()) {
     		while (rs.next()) {
-    			formPost.setId(rs.getLong(1));
+    			einKommentar.setId(rs.getLong(1));
     		}	
     	}
     	}catch (Exception ex) {
@@ -69,6 +70,7 @@ public class Kommentieren extends HttpServlet {
 		Kommentar formKommentar = new Kommentar();
 		formKommentar.setUsername(login.getUsername());
 		formKommentar.setKommentar(request.getParameter("kommentar"));
+		formKommentar.setPost_id(Integer.valueOf(request.getParameter("id")));
 	
 	
 		
@@ -78,7 +80,7 @@ public class Kommentieren extends HttpServlet {
 
 
 		
-		response.sendRedirect("./AllePostsAusgeben");
+		response.sendRedirect("./Kommentieren.jsp");
 
 	
 	}

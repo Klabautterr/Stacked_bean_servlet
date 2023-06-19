@@ -73,6 +73,7 @@ public class Posten extends HttpServlet {
 		//zieht die daten aus der Login session
 		HttpSession session = request.getSession();
 		Login login = (Login) session.getAttribute("Login");
+		
 	
 		
 		//holt die Daten aus der JSP und erstellt eine object bean
@@ -88,7 +89,6 @@ public class Posten extends HttpServlet {
 
 		session.setAttribute("formPost", formPost);
 		ein_Post(formPost, filepart);
-
 
 		
 		response.sendRedirect("./AllePostsAusgeben");

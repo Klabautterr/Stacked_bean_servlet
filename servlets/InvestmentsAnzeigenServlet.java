@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Assets;
 import stacked_bs.bean.Login;
+import stacked_bs.bean.User;
 
 /**
  * Servlet implementation class InvestmentsAnzeigenServlet
@@ -39,7 +40,6 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 	private DataSource ds;
 
 	private List<Assets> search(String username) throws ServletException, SQLException {
-
 
 		List<Assets> assets = new ArrayList<Assets>();
 
@@ -65,6 +65,29 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 		return assets;
 	}
 
+	private boolean Profiueberpruefen(String username) throws SQLException {
+		boolean ifProfi = false;
+
+		List<User> user = new ArrayList<User>();
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con
+						.prepareStatement("SELECT profi FROM thidb.user WHERE BINARY username = ? AND profi = true")) {
+
+			pstmt.setString(1, username);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					if (rs.getString("profi").equals("1")) {
+						ifProfi = true;
+					} else {
+						ifProfi = false;
+					}
+				}
+			}
+
+		}
+		return ifProfi;
+	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -73,11 +96,9 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		request.setCharacterEncoding("UTF-8");
-		
+
 		HttpSession session = request.getSession();
 		Login login = (Login) session.getAttribute("Login");
-
-		Assets assets = new Assets();
 
 		String username = login.getUsername();
 
@@ -86,8 +107,14 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 
 			request.setAttribute("AssetsAnzeigen", assetsAnzeigen);
 
-			final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profil.jsp");
-			dispatcher.forward(request, response);
+			if (Profiueberpruefen(login.getUsername()) == true) {
+				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profi.jsp");
+				dispatcher.forward(request, response);
+			} else {
+				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profil.jsp");
+				dispatcher.forward(request, response);
+			}
+
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

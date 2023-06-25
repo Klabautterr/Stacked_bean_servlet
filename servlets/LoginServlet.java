@@ -44,7 +44,8 @@ public class LoginServlet extends HttpServlet {
 
 	private boolean Nutzerueberpruefen(Login form) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM user Where BINARY username = ? AND BINARY passwort = ?")) {
+				PreparedStatement pstmt = con
+						.prepareStatement("SELECT * FROM user Where BINARY username = ? AND BINARY passwort = ?")) {
 
 			pstmt.setString(1, form.getUsername());
 			pstmt.setString(2, form.getPasswort());
@@ -80,10 +81,11 @@ public class LoginServlet extends HttpServlet {
 		}
 
 	}
-	
-	private boolean Adminueberpruefen(Login form) throws ServletException, SQLException{
+
+	private boolean Adminueberpruefen(Login form) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM user Where BINARY username = ? AND admin = true")) {
+				PreparedStatement pstmt = con
+						.prepareStatement("SELECT * FROM user Where BINARY username = ? AND admin = true")) {
 
 			pstmt.setString(1, form.getUsername());
 
@@ -97,25 +99,7 @@ public class LoginServlet extends HttpServlet {
 		} catch (Exception ex) {
 			throw new ServletException(ex.getMessage());
 		}
-		
-	}
-	
-	private boolean Profiueberpruefung(Login form) throws ServletException, SQLException{
-		try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM user Where BINARY username = ? AND profi = true")) {
 
-			pstmt.setString(1, form.getUsername());
-
-			try (ResultSet rs = pstmt.executeQuery()) {
-				if (rs.next()) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		} catch (Exception ex) {
-			throw new ServletException(ex.getMessage());
-		}
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -130,13 +114,11 @@ public class LoginServlet extends HttpServlet {
 
 		try {
 			if (Nutzerueberpruefen(form)) {
-				if(Adminueberpruefen(form)) {
+				if (Adminueberpruefen(form)) {
 					response.sendRedirect("Stacked/JSP/Admin.jsp");
-				}else if(Profiueberpruefung(form)){
-					response.sendRedirect("Stacked/JSP/Profi.jsp");
-				}
-				else{
+				} else {
 					response.sendRedirect("./InvestmentsAnzeigenServlet");
+
 				}
 			} else {
 				if (Benutzernameueberpruefen(form)) {

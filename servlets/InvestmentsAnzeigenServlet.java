@@ -65,10 +65,10 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 		return assets;
 	}
 
+//<<<<<<< Updated upstream
 	private boolean Profiueberpruefen(String username) throws SQLException {
 		boolean ifProfi = false;
-
-		List<User> user = new ArrayList<User>();
+		
 		try (Connection con = ds.getConnection();
 				PreparedStatement pstmt = con
 						.prepareStatement("SELECT profi FROM thidb.user WHERE BINARY username = ? AND profi = true")) {
@@ -106,15 +106,16 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 			List<Assets> assetsAnzeigen = search(username);
 
 			request.setAttribute("AssetsAnzeigen", assetsAnzeigen);
+//<<<<<<< Updated upstream
 
 			if (Profiueberpruefen(login.getUsername()) == true) {
+
 				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profi.jsp");
 				dispatcher.forward(request, response);
 			} else {
 				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profil.jsp");
 				dispatcher.forward(request, response);
 			}
-
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

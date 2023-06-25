@@ -101,18 +101,29 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 		Login login = (Login) session.getAttribute("Login");
 
 		String username = login.getUsername();
-
+		String FollowUser = request.getParameter("username");
+		request.setAttribute("FollowUser", FollowUser);
+		
 		try {
-			List<Assets> assetsAnzeigen = search(username);
 
-			request.setAttribute("AssetsAnzeigen", assetsAnzeigen);
-//<<<<<<< Updated upstream
+			if(FollowUser != null) {
+				List<Assets> assetsAnzeigen = search(FollowUser);
 
-			if (Profiueberpruefen(login.getUsername()) == true) {
+				request.setAttribute("AssetsAnzeigen", assetsAnzeigen);
+				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/FollowProfil.jsp");
+				dispatcher.forward(request, response);
+			}
+			else if (Profiueberpruefen(login.getUsername()) == true) {
+				List<Assets> assetsAnzeigen = search(username);
+
+				request.setAttribute("AssetsAnzeigen", assetsAnzeigen);
 
 				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profi.jsp");
 				dispatcher.forward(request, response);
 			} else {
+				List<Assets> assetsAnzeigen = search(username);
+
+				request.setAttribute("AssetsAnzeigen", assetsAnzeigen);
 				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profil.jsp");
 				dispatcher.forward(request, response);
 			}

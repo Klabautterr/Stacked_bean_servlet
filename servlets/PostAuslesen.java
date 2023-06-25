@@ -44,8 +44,10 @@ public class PostAuslesen extends HttpServlet {
 				pstmt.setLong(1, id);
 				try (ResultSet rs = pstmt.executeQuery()) {
 				
+					
 					if (rs != null && rs.next()) {
 						Blob bild = rs.getBlob("bild");
+						
 						response.reset();
 						long length = bild.length();
 						response.setHeader("Content-Length",String.valueOf(length));

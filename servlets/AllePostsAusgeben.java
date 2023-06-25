@@ -48,6 +48,7 @@ public class AllePostsAusgeben extends HttpServlet {
 	                post.setUsername(rs.getString("username"));
 	                post.setNachricht(rs.getString("nachricht"));
 	                post.setAnzahl_likes(rs.getInt("anzahl_likes"));
+	                post.setBildname(rs.getString("bildname"));
 	                
 	       
 	                posts.add(post);

@@ -199,7 +199,7 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		session.setAttribute("Login", form);
 		update(form, filepart, AlterUsername);
 
-		response.sendRedirect("Stacked/JSP/Profil.jsp");
+		response.sendRedirect("./InvestmentsAnzeigenServlet");
 
 		
 	}

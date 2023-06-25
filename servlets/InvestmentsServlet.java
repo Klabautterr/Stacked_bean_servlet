@@ -77,7 +77,7 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 		session.setAttribute("Assets", assets);
 		persist(assets);
 
-		response.sendRedirect("Stacked/JSP/Profil.jsp");
+		response.sendRedirect("./InvestmentsAnzeigenServlet");
 
 	}
 

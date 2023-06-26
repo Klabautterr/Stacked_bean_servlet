@@ -56,6 +56,77 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 		}
 	}
 
+//	private boolean duplicateAssets(String stockname) throws SQLException, ServletException {
+//
+//		List<Assets> duplicate = new ArrayList<Assets>();
+//
+//		try (Connection con = ds.getConnection();
+//				PreparedStatement pstmt = con.prepareStatement(
+//						"SELECT id, username, stockname FROM investments WHERE BINARY stockname ? AND username = ?")) {
+//			try (ResultSet rs = pstmt.executeQuery()) {
+//				while (rs.next()) {
+//					Assets doubleAssets = new Assets();
+//					doubleAssets.setStockname(rs.getString("stockname"));
+//					doubleAssets.setUsername(rs.getString("username"));
+//
+//					duplicate.add(doubleAssets);
+//				}
+//
+//			} catch (Exception e) {
+//				throw new ServletException(e.getMessage());
+//			}
+//		}
+//		boolean ifDuplicate = false;
+//		for (Assets asset : duplicate) {
+//			if (duplicate.contains(asset)) {
+//				ifDuplicate = true;
+//			} else {
+//				ifDuplicate = false;
+//			}
+//		}
+//		return ifDuplicate;
+//	}
+
+	private boolean duplicateAssets(Assets assets) throws SQLException, ServletException { // von ChatGPT
+
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(
+						"SELECT * FROM investments WHERE BINARY stockname = ? AND BINARY username = ?")) {
+
+			pstmt.setString(1, assets.getStockname());
+			pstmt.setString(2, assets.getUsername());
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+
+					return true;
+				} else {
+					return false;
+
+				}
+
+			}
+		} catch (Exception e) {
+			throw new ServletException(e.getMessage());
+		}
+	}
+
+	private void updateInvestments(Assets assets) throws ServletException {
+		
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(
+						"UPDATE thidb.investments SET  anzahl = anzahl + ? , buyin = ? WHERE  stockname = ? AND username = ?")) {
+
+			pstmt.setInt(1, assets.getAnzahl());
+			pstmt.setInt(2, assets.getBuyin());
+			pstmt.setString(3, assets.getStockname());
+			pstmt.setString(4, assets.getUsername());
+
+			pstmt.execute();
+		} catch (SQLException e) {
+			throw new ServletException(e.getMessage());
+		}
+	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -74,10 +145,31 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 		assets.setAnzahl(Integer.valueOf(request.getParameter("amountOfStock")));
 		assets.setBuyin(Integer.valueOf(request.getParameter("buyIn")));
 
-		session.setAttribute("Assets", assets);
-		persist(assets);
+		
 
-		response.sendRedirect("./InvestmentsAnzeigenServlet");
+		try {
+			if (duplicateAssets(assets) == false) {
+				session.setAttribute("Assets", assets);
+				persist(assets);
+
+				response.sendRedirect("./InvestmentsAnzeigenServlet");
+			} else {
+				session.setAttribute("Assets", assets);
+
+				updateInvestments(assets);
+				response.sendRedirect("./InvestmentsAnzeigenServlet");
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

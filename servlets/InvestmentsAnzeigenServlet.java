@@ -52,8 +52,8 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 					Assets asset = new Assets();
 					asset.setUsername(rs.getString("username"));
 					asset.setStockname(rs.getString("stockname"));
-					asset.setAnzahl(Integer.valueOf(rs.getInt("buyin")));
-					asset.setBuyin(Integer.valueOf(rs.getInt("anzahl")));
+					asset.setAnzahl(Integer.valueOf(rs.getInt("anzahl")));
+					asset.setBuyin(Integer.valueOf(rs.getInt("buyin")));
 
 					assets.add(asset);
 				}

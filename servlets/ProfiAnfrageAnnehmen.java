@@ -10,6 +10,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import stacked_bs.bean.Login;
 // Jonathan 
 /**
  * Servlet implementation class ProfilanfrageAnnehmen
@@ -56,6 +58,10 @@ public class ProfiAnfrageAnnehmen extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		HttpSession session = request.getSession();
+		Login login = (Login) session.getAttribute("Login");		
+		login.setOffeneProfiAnfrage(false);
+
 		
 		String username = request.getParameter("username");
 		

@@ -53,7 +53,7 @@ public class ProfiAnfrageStellen extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
 		Login login = (Login) session.getAttribute("Login");
-		
+		login.setOffeneProfiAnfrage(true);
 		persist(login);
 
 		response.sendRedirect("./Stacked/JSP/ProfilBearbeiten.jsp");

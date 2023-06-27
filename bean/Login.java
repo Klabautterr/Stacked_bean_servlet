@@ -6,6 +6,10 @@ public class Login implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private String passwort;
+	private boolean isProfi = true;
+	private boolean offeneProfiAnfrage = true;
+	
+	
 	public String getUsername() {
 		return username;
 	}
@@ -18,6 +22,21 @@ public class Login implements Serializable{
 	public void setPasswort(String passwort) {
 		this.passwort = passwort;
 	}
+	public boolean getIsProfi() {
+		return isProfi;
+	}
+	public void setIsProfi(boolean isProfi) {
+		this.isProfi = isProfi;
+	}
+	public boolean getOffeneProfiAnfrage() {
+		return offeneProfiAnfrage;
+	}
+	public void setOffeneProfiAnfrage(boolean offeneProfiAnfrage) {
+		this.offeneProfiAnfrage = offeneProfiAnfrage;
+	}
+
+
+
 	
 
 		

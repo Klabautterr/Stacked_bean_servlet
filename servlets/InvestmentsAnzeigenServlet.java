@@ -68,7 +68,7 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 //<<<<<<< Updated upstream
 	private boolean Profiueberpruefen(String username) throws SQLException {
 		boolean ifProfi = false;
-		
+
 		try (Connection con = ds.getConnection();
 				PreparedStatement pstmt = con
 						.prepareStatement("SELECT profi FROM thidb.user WHERE BINARY username = ? AND profi = true")) {
@@ -88,6 +88,26 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 		return ifProfi;
 	}
 
+	private boolean Adminueberpruefen(String username) throws ServletException, SQLException {
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con
+						.prepareStatement("SELECT * FROM user Where BINARY username = ? AND admin = true")) {
+
+			pstmt.setString(1, username);
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} catch (Exception ex) {
+			throw new ServletException(ex.getMessage());
+		}
+
+	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -99,31 +119,32 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		Login login = (Login) session.getAttribute("Login");
-
 		String username = login.getUsername();
 		String FollowUser = request.getParameter("username");
 		request.setAttribute("FollowUser", FollowUser);
-		
+
 		try {
 
-			if(FollowUser != null) {
+			if (FollowUser != null) {
 				List<Assets> assetsAnzeigen = search(FollowUser);
 
 				request.setAttribute("AssetsAnzeigen", assetsAnzeigen);
 				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/FollowProfil.jsp");
 				dispatcher.forward(request, response);
-			}
-			else if (Profiueberpruefen(login.getUsername()) == true) {
+			} else if (Adminueberpruefen(username)) {
+				response.sendRedirect("./Stacked/JSP/Admin.jsp");
+			} else if (Profiueberpruefen(login.getUsername()) == true) {
 				List<Assets> assetsAnzeigen = search(username);
 
 				request.setAttribute("AssetsAnzeigen", assetsAnzeigen);
-
+				login.setIsProfi(true);
 				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profi.jsp");
 				dispatcher.forward(request, response);
 			} else {
 				List<Assets> assetsAnzeigen = search(username);
 
 				request.setAttribute("AssetsAnzeigen", assetsAnzeigen);
+				login.setIsProfi(false);
 				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profil.jsp");
 				dispatcher.forward(request, response);
 			}

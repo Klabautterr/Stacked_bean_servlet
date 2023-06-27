@@ -12,6 +12,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import stacked_bs.bean.Login;
 
 /**
  * Servlet implementation class ProfiAnfrageAblehnen
@@ -52,6 +54,10 @@ public class ProfiAnfrageAblehnen extends HttpServlet {
 
 		request.setCharacterEncoding("UTF-8");
 
+		HttpSession session = request.getSession();
+		Login login = (Login) session.getAttribute("Login");		
+		login.setOffeneProfiAnfrage(false);
+		
 		String username = request.getParameter("username");
 
 		persist(username);

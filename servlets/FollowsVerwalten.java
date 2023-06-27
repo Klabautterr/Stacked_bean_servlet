@@ -91,6 +91,7 @@ public class FollowsVerwalten extends HttpServlet {
 	    }
     return follower;
 	    }
+	    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");   // In diesem Format erwartet das Servlet jetzt die Formulardaten
 		HttpSession session = request.getSession();

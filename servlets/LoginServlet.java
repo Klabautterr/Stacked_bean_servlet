@@ -81,26 +81,6 @@ public class LoginServlet extends HttpServlet {
 		}
 
 	}
-
-	private boolean Adminueberpruefen(Login form) throws ServletException, SQLException {
-		try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con
-						.prepareStatement("SELECT * FROM user Where BINARY username = ? AND admin = true")) {
-
-			pstmt.setString(1, form.getUsername());
-
-			try (ResultSet rs = pstmt.executeQuery()) {
-				if (rs.next()) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		} catch (Exception ex) {
-			throw new ServletException(ex.getMessage());
-		}
-
-	}
 	
 	private boolean ProfiAnfrageUeberpruefen(String username) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,13 +38,39 @@ public class UserSuchen extends HttpServlet {
 	private DataSource ds;
 	
 	/**
+	 * @throws ServletException 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	
-	private List<User> userSuchen(String username) throws ServletException {
+	private boolean befreundet(String username, String eingeloggterUser) throws ServletException {
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con
+						.prepareStatement("SELECT * FROM thidb.follow Where BINARY (username1 = ? AND BINARY username2 = ?) OR (BINARY username1 = ? AND BINARY username2 = ?)")) 
+		{
+
+			pstmt.setString(1, username);
+			pstmt.setString(2, eingeloggterUser);
+			pstmt.setString(3, eingeloggterUser);
+			pstmt.setString(4, username);
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} catch (Exception ex) {
+			throw new ServletException(ex.getMessage());
+		}	
+	}
+	
+	
+	private List<User> userSuchen(String username, String eingeloggterUser) throws ServletException {
 
 	    List<User> userSuche = new ArrayList<>();
 
+	    
 	    try (Connection con = ds.getConnection();
 	         PreparedStatement pstmt = con.prepareStatement("SELECT username FROM thidb.user WHERE username Like ?")) {
 		
@@ -51,11 +78,14 @@ public class UserSuchen extends HttpServlet {
 
 	        try (ResultSet rs = pstmt.executeQuery()) {
 
-	            while (rs.next()) {
-	                User user = new User();
-	                user.setUsername(rs.getString("username"));
+	            while (rs.next() && !(rs.getString("username").equals(eingeloggterUser))) {
+	            	
+	            	if(!befreundet(rs.getString("username"), eingeloggterUser )) {
+		                User user = new User();
+		                user.setUsername(rs.getString("username"));
+		                userSuche.add(user);
+	            	}
 
-	                userSuche.add(user);
 	            } 
 	        }
 	    } catch (Exception ex) {
@@ -65,12 +95,18 @@ public class UserSuchen extends HttpServlet {
 	    return userSuche;
 	}
 
+
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
+		
+		HttpSession session = request.getSession();
+		Login login = (Login) session.getAttribute("Login");
+		String eingeloggterUser = login.getUsername();
 		String username = request.getParameter("username");
 		// DB-Zugriff
-		List<User> userSuche = userSuchen(username);
+		List<User> userSuche = userSuchen(username, eingeloggterUser);
 		            
 		// Scope "Request"
 		request.setAttribute("userSuche", userSuche);

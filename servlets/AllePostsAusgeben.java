@@ -16,6 +16,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import stacked_bs.bean.Login;
 import stacked_bs.bean.Post;
 
 /**
@@ -70,7 +72,13 @@ public class AllePostsAusgeben extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		request.setCharacterEncoding("UTF-8");   
+		request.setCharacterEncoding("UTF-8");  
+		
+		HttpSession session = request.getSession();
+		Login login = (Login) session.getAttribute("Login");
+		
+		 String loginUsername = login.getUsername();
+		 request.setAttribute("loginUsername", loginUsername);
 
 		Long schongeladen = 0L;
 		if (request.getParameter("schongeladen") != null) {
@@ -90,18 +98,6 @@ public class AllePostsAusgeben extends HttpServlet {
 		
 		dispatcher.forward(request, response);
 	}
-		/*request.setCharacterEncoding("UTF-8");   
-		
-		// DB-Zugriff
-		List<Post> posts = search(5L);
-		            
-		// Scope "Request"
-		request.setAttribute("posts", posts);
-		    
-		// Weiterleiten an JSP
-		final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/FeedPosts.jsp");
-		dispatcher.forward(request, response);
-		}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

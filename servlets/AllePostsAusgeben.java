@@ -32,14 +32,15 @@ public class AllePostsAusgeben extends HttpServlet {
 	private DataSource ds;
 	
 	
-	private List<Post> search(Long id) throws ServletException {
+	private List<Post> search(Long id,Long schongeladen) throws ServletException {
 
 	    List<Post> posts = new ArrayList<>();
 
 	    try (Connection con = ds.getConnection();
-	         PreparedStatement pstmt = con.prepareStatement("SELECT * FROM post ORDER BY id DESC LIMIT ?")) {
+	         PreparedStatement pstmt = con.prepareStatement("SELECT * FROM post ORDER BY id DESC LIMIT ?, ?")) {
 
-	        pstmt.setLong(1, id);
+	        pstmt.setLong(1, schongeladen);
+	        pstmt.setLong(2, id);
 	        try (ResultSet rs = pstmt.executeQuery()) {
 
 	            while (rs.next()) {
@@ -70,6 +71,26 @@ public class AllePostsAusgeben extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");   
+
+		Long schongeladen = 0L;
+		if (request.getParameter("schongeladen") != null) {
+			schongeladen = Long.valueOf(request.getParameter("schongeladen"));
+		}
+
+		List<Post> posts = search(5L, schongeladen);
+
+		request.setAttribute("posts", posts);
+
+		final RequestDispatcher dispatcher;
+		if (schongeladen > 0) {			
+			dispatcher = request.getRequestDispatcher("Stacked/JSP/Feedloader.jsp");
+		}else {
+			dispatcher = request.getRequestDispatcher("Stacked/JSP/FeedPosts.jsp");
+		}
+		
+		dispatcher.forward(request, response);
+	}
+		/*request.setCharacterEncoding("UTF-8");   
 		
 		// DB-Zugriff
 		List<Post> posts = search(5L);

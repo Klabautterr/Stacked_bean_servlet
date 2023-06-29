@@ -9,7 +9,6 @@ import javax.sql.DataSource;
 
 import stacked_bs.bean.Kommentar;
 import jakarta.annotation.Resource;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -78,11 +77,13 @@ public class Kommentieren extends HttpServlet {
 
 		session.setAttribute("formKommentar", formKommentar);
 		ein_Kommentar(formKommentar);
-
+		
+		//Long id = Long.valueOf(request.getParameter("id"));
+		
+		//request.setAttribute("id", id);
 
 		
-		final RequestDispatcher dispatcher = request.getRequestDispatcher("./EinPostAusgeben");
-		dispatcher.forward(request, response);	
+		response.sendRedirect("Stacked/webapp/JSP/Kommentieren.jsp");
 
 	
 	}

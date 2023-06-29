@@ -140,6 +140,7 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 				login.setIsProfi(true);
 				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profi.jsp");
 				dispatcher.forward(request, response);
+				return;
 			} else {
 				List<Assets> assetsAnzeigen = search(username);
 
@@ -147,6 +148,7 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 				login.setIsProfi(false);
 				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profil.jsp");
 				dispatcher.forward(request, response);
+				return;
 			}
 		} catch (ServletException e) {
 			// TODO Auto-generated catch block

@@ -37,7 +37,7 @@ public class CommentLoad extends HttpServlet {
         List<Kommentar> coms = new ArrayList<>();
         
         try (Connection con = ds.getConnection();
-   	         PreparedStatement pstmt = con.prepareStatement("SELECT * FROM Kommentar WHERE post_id == ? ORDER BY id DESC LIMIT ?, ?")) {
+   	         PreparedStatement pstmt = con.prepareStatement("SELECT * FROM kommentare WHERE post_id = ? ORDER BY id DESC LIMIT ?, ?")) {
 
         	pstmt.setLong(1, postID);
    	        pstmt.setLong(2, offset);

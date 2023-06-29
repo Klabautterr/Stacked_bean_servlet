@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 
 import stacked_bs.bean.Kommentar;
 import jakarta.annotation.Resource;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -80,7 +81,8 @@ public class Kommentieren extends HttpServlet {
 
 
 		
-		response.sendRedirect("./EinPostAusgeben");
+		final RequestDispatcher dispatcher = request.getRequestDispatcher("./EinPostAusgeben");
+		dispatcher.forward(request, response);	
 
 	
 	}

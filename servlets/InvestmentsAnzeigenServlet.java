@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Assets;
 import stacked_bs.bean.Login;
-import stacked_bs.bean.User;
+
 
 /**
  * Servlet implementation class InvestmentsAnzeigenServlet

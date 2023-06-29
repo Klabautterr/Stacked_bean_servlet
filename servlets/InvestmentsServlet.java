@@ -56,37 +56,6 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 		}
 	}
 
-//	private boolean duplicateAssets(String stockname) throws SQLException, ServletException {
-//
-//		List<Assets> duplicate = new ArrayList<Assets>();
-//
-//		try (Connection con = ds.getConnection();
-//				PreparedStatement pstmt = con.prepareStatement(
-//						"SELECT id, username, stockname FROM investments WHERE BINARY stockname ? AND username = ?")) {
-//			try (ResultSet rs = pstmt.executeQuery()) {
-//				while (rs.next()) {
-//					Assets doubleAssets = new Assets();
-//					doubleAssets.setStockname(rs.getString("stockname"));
-//					doubleAssets.setUsername(rs.getString("username"));
-//
-//					duplicate.add(doubleAssets);
-//				}
-//
-//			} catch (Exception e) {
-//				throw new ServletException(e.getMessage());
-//			}
-//		}
-//		boolean ifDuplicate = false;
-//		for (Assets asset : duplicate) {
-//			if (duplicate.contains(asset)) {
-//				ifDuplicate = true;
-//			} else {
-//				ifDuplicate = false;
-//			}
-//		}
-//		return ifDuplicate;
-//	}
-
 	private boolean duplicateAssets(Assets assets) throws SQLException, ServletException { // von ChatGPT
 
 		try (Connection con = ds.getConnection();
@@ -109,6 +78,7 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 			throw new ServletException(e.getMessage());
 		}
 	}
+	
 
 	private void updateInvestments(Assets assets) throws ServletException {
 		
@@ -126,7 +96,6 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 			throw new ServletException(e.getMessage());
 		}
 	}
-
 	
 	
 	

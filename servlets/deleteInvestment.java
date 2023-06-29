@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import stacked_bs.bean.Assets;
 import stacked_bs.bean.Login;
 
 /**
@@ -60,8 +59,7 @@ public class deleteInvestment extends HttpServlet {
 		String stockname = request.getParameter("assetId");
 
 		String username = login.getUsername();
-		System.out.println(username);
-		System.out.println(stockname);
+		
 		try {
 			deleteInvestments(stockname, username);
 			response.sendRedirect("./InvestmentsAnzeigenServlet");

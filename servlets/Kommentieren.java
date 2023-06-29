@@ -80,7 +80,7 @@ public class Kommentieren extends HttpServlet {
 
 
 		
-		response.sendRedirect("./JSP/Kommentieren.jsp");
+		response.sendRedirect("./EinPostAusgeben");
 
 	
 	}

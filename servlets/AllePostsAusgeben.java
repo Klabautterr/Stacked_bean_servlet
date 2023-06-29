@@ -63,8 +63,36 @@ public class AllePostsAusgeben extends HttpServlet {
 	    
 	    return posts;
 	}
+	
+	private List<Post> freundePosts(Long id, Long schongeladen, String loginusername) throws ServletException {
+	    List<Post> posts = new ArrayList<>();
 
+	    try (Connection con = ds.getConnection();
+	         PreparedStatement pstmt = con.prepareStatement("SELECT P.* FROM thidb.post P JOIN follow F ON P.username = F.username2 WHERE F.username1 = ? ORDER BY P.id DESC LIMIT ?, ?")) {
 
+	        pstmt.setString(1, loginusername);
+	        pstmt.setLong(2, schongeladen);
+	        pstmt.setLong(3, id);
+	        try (ResultSet rs = pstmt.executeQuery()) {
+
+	            while (rs.next()) {
+	                Post post = new Post();
+	                post.setId(Long.valueOf(rs.getLong("id")));
+	                post.setUsername(rs.getString("username"));
+	                post.setNachricht(rs.getString("nachricht"));
+	                post.setAnzahl_likes(rs.getInt("anzahl_likes"));
+	                post.setBildname(rs.getString("bildname"));
+	                
+	       
+	                posts.add(post);
+	            } 
+	        }
+	    } catch (Exception ex) {
+	        throw new ServletException(ex.getMessage());
+	    }
+	    
+	    return posts;
+	}
 
 
 	/**
@@ -84,20 +112,32 @@ public class AllePostsAusgeben extends HttpServlet {
 		if (request.getParameter("schongeladen") != null) {
 			schongeladen = Long.valueOf(request.getParameter("schongeladen"));
 		}
-
-		List<Post> posts = search(5L, schongeladen);
-
-		request.setAttribute("posts", posts);
-
-		final RequestDispatcher dispatcher;
-		if (schongeladen > 0) {			
-			dispatcher = request.getRequestDispatcher("Stacked/JSP/Feedloader.jsp");
-		}else {
-			dispatcher = request.getRequestDispatcher("Stacked/JSP/FeedPosts.jsp");
-		}
 		
-		dispatcher.forward(request, response);
-	}
+			
+			String welcheSearch = request.getParameter("welcheSearch");
+			if (welcheSearch == null) {
+			    welcheSearch = "0";
+			}
+	
+			List<Post> posts;
+			final RequestDispatcher dispatcher;
+
+			if (welcheSearch.equals("0")) {
+				posts = search(5L, schongeladen);
+			} else {
+				posts = freundePosts(5L, schongeladen, loginUsername);
+			}
+
+			request.setAttribute("posts", posts);
+
+			if (schongeladen > 0) {			
+				dispatcher = request.getRequestDispatcher("Stacked/JSP/Feedloader.jsp");
+			} else {
+				dispatcher = request.getRequestDispatcher("Stacked/JSP/FeedPosts.jsp");
+			}
+
+			dispatcher.forward(request, response);
+		}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

@@ -72,6 +72,7 @@ public class deleteInvestment extends HttpServlet {
 			e.printStackTrace();
 		}
 
+		
 	}
 
 	/**

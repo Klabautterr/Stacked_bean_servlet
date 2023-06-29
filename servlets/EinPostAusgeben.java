@@ -17,6 +17,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Post;
 
 /**
@@ -64,13 +65,13 @@ public class EinPostAusgeben extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		request.setCharacterEncoding("UTF-8");   
-
+		HttpSession session = request.getSession();
 	
 		Long id = Long.valueOf(request.getParameter("id"));
 		
 		Post post  = search(id); 
 
-		request.setAttribute("post", post);
+		session.setAttribute("post", post);
 
 	        final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Kommentieren.jsp");
 	        dispatcher.forward(request, response);

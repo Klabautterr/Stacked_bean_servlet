@@ -1,14 +1,16 @@
 package stacked_bs.servlets;
 
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+import javax.sql.DataSource;
+import java.io.IOException;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.RequestDispatcher;
@@ -21,6 +23,7 @@ import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.User;
 import stacked_bs.bean.Login;
 
+
 //Jonathan Vielwerth
 
 /**
@@ -30,92 +33,136 @@ import stacked_bs.bean.Login;
 public class FollowsVerwalten extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * Default constructor. 
-     */
-    public FollowsVerwalten() {
-        // TODO Auto-generated constructor stub
-    }
-
-    @Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
-	private DataSource ds;
-	
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * Default constructor.
 	 */
-	
+	public FollowsVerwalten() {
+		// TODO Auto-generated constructor stub
+	}
+
+	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
+	private DataSource ds;
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+
 	private List<User> followsAuslesen(String user) throws ServletException {
 
-	    List<User> follows = new ArrayList<>();
+		List<User> follows = new ArrayList<>();
 
-	    try (Connection con = ds.getConnection();
-	         PreparedStatement pstmt = con.prepareStatement("SELECT username2 FROM thidb.follow Where username1 = ?")) {
-    		pstmt.setString(1, user);
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con
+						.prepareStatement("SELECT username2 FROM thidb.follow Where username1 = ?")) {
+			pstmt.setString(1, user);
 
-	        try (ResultSet rs = pstmt.executeQuery()) {
+			try (ResultSet rs = pstmt.executeQuery()) {
 
-	            while (rs.next()) {
-	                User aktuelleFollows = new User();
-	                aktuelleFollows.setUsername(rs.getString("username2"));
+				while (rs.next()) {
+					User aktuelleFollows = new User();
+					aktuelleFollows.setUsername(rs.getString("username2"));
 
-	                follows.add(aktuelleFollows);
-	            } 
-	        }
-	        
-	    } catch (Exception ex) {
-	        throw new ServletException(ex.getMessage());
-	    }
-	    return follows;
+					follows.add(aktuelleFollows);
+				}
+			}
+
+		} catch (Exception ex) {
+			throw new ServletException(ex.getMessage());
+		}
+		return follows;
 	}
-	    private List<User> followerAuslesen (String user) throws ServletException{
-	    	
-		    List<User> follower = new ArrayList<>();
 
+	private Map<String, List<User>> followerAuslesen(String user) throws ServletException {
+
+		Map<String, List<User>> followerMap = new HashMap<>();
+		List<User> followerOhneFollow = new ArrayList<>();
+		List<User> followerMitFollow = new ArrayList<>();
+
+
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con
+						.prepareStatement("SELECT username1 FROM thidb.follow Where BINARY username2 = ?")) {
+			pstmt.setString(1, user);
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+
+				while (rs.next()) {
+					if (schonFolgen(rs.getString("username1"), user)) { 	
+						User aktuelleFollowerOhneFollow = new User();
+						aktuelleFollowerOhneFollow.setUsername(rs.getString("username1"));
+
+						followerOhneFollow.add(aktuelleFollowerOhneFollow);
+					}else {
+						User aktuelleFollowerMitFollow = new User();
+						aktuelleFollowerMitFollow.setUsername(rs.getString("username1"));
+						followerMitFollow.add(aktuelleFollowerMitFollow);
+					}
+
+					}
+				}
+
+		} catch (Exception ex) {
+			throw new ServletException(ex.getMessage());
+		}
+	    followerMap.put("followerOhneFollow", followerOhneFollow);
+	    followerMap.put("followerMitFollow", followerMitFollow);
 	    
- try (Connection con = ds.getConnection();
-		         PreparedStatement pstmt = con.prepareStatement("SELECT username1 FROM thidb.follow Where username2 = ?")) {
-	    		pstmt.setString(1, user);
+	    return followerMap;
+	}
 
-		        try (ResultSet rs = pstmt.executeQuery()) {
 
-		            while (rs.next()) {
-		                User aktuelleFollower= new User();
-		                aktuelleFollower.setUsername(rs.getString("username1"));
+	private boolean schonFolgen(String username, String user) throws ServletException, SQLException {
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con
+						.prepareStatement("SELECT * FROM follow Where BINARY username1 = ? AND BINARY username2 = ?")) {
+			pstmt.setString(1, user);
+			pstmt.setString(2, username);
 
-		                follower.add(aktuelleFollower);
-		            } 
-		        }
-		        
-		    } catch (Exception ex) {
-		        throw new ServletException(ex.getMessage());
-	    }
-    return follower;
-	    }
-	    
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");   // In diesem Format erwartet das Servlet jetzt die Formulardaten
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} catch (Exception ex) {
+			throw new ServletException(ex.getMessage());
+		}
+
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8"); // In diesem Format erwartet das Servlet jetzt die Formulardaten
 		HttpSession session = request.getSession();
 		Login login = (Login) session.getAttribute("Login");
 		String user = login.getUsername();
-		
+
 		// DB-Zugriff
 		List<User> follows = followsAuslesen(user);
-		List<User> follower = followerAuslesen(user);
-		            
+
+		Map<String, List<User>> followerMap = followerAuslesen(user);
+
+		List<User> followerOhneFollow = followerMap.get("followerOhneFollow");
+		List<User> followerMitFollow = followerMap.get("followerMitFollow");
+		
 		// Scope "Request"
 		request.setAttribute("follows", follows);
-		request.setAttribute("follower", follower);
+		request.setAttribute("followerOhneFollow", followerOhneFollow);
+		request.setAttribute("followerMitFollow", followerMitFollow);
 
 		// Weiterleiten an JSP
 		final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Freunde.jsp");
-		dispatcher.forward(request, response);  
-		}
-	
+		dispatcher.forward(request, response);
+	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}

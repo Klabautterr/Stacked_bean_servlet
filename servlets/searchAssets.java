@@ -18,6 +18,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Assets;
 
 /**
@@ -44,18 +45,19 @@ public class searchAssets extends HttpServlet implements Servlet {
     	
 		try (Connection con = ds.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(
-						"SELECT stockname FROM aktien")) {
+						"SELECT * FROM thidb.aktien")) {
 			try(ResultSet rs = pstmt.executeQuery()){
 				while(rs.next()) {
 					Assets asset = new Assets();
-					asset.setStockname(rs.getString("stockname"));
-					
+					asset.setStockname(rs.getString("aktien"));
+					System.out.println(rs.getString("aktien"));
 					refillDropDown.add(asset);
 				}
 			}catch (Exception e) {
 				throw new ServletException(e.getMessage());
 			}
 		}
+		
 		return refillDropDown;
     }
     
@@ -67,14 +69,12 @@ public class searchAssets extends HttpServlet implements Servlet {
 		
 		try {
 			List<Assets> refillDropDown = searchToRefillAssets();
-			request.setAttribute("refillDropDown", refillDropDown);
-			final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/addInvestment.jsp");
+			request.setAttribute("refillDropDown",refillDropDown);
+			final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/stocknameLoader.jsp");
 			dispatcher.forward(request, response);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ServletException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

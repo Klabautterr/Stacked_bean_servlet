@@ -86,7 +86,8 @@ public class Liken extends HttpServlet {
 
 		Long id = Long.valueOf(request.getParameter("id"));
 		String username = login.getUsername();
-
+		
+	//	String 
 		
 		liken(id, username);
 			

@@ -12,6 +12,7 @@ import stacked_bs.bean.Login;
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -81,11 +82,11 @@ public class LoginServlet extends HttpServlet {
 		}
 
 	}
-	
+
 	private boolean ProfiAnfrageUeberpruefen(String username) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con
-						.prepareStatement("SELECT * FROM user Where BINARY username = ? AND offeneProfiAnfrage = true")) {
+				PreparedStatement pstmt = con.prepareStatement(
+						"SELECT * FROM user Where BINARY username = ? AND offeneProfiAnfrage = true")) {
 
 			pstmt.setString(1, username);
 
@@ -101,9 +102,6 @@ public class LoginServlet extends HttpServlet {
 		}
 
 	}
-	
-	
-	
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -111,44 +109,48 @@ public class LoginServlet extends HttpServlet {
 		Login form = new Login();
 		form.setUsername(request.getParameter("username"));
 		form.setPasswort(request.getParameter("passwort"));
-		
-		try {
-			if(ProfiAnfrageUeberpruefen(request.getParameter("username"))){
-				form.setOffeneProfiAnfrage(true);
-			}else{
-				form.setOffeneProfiAnfrage(false);
-			}
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		HttpSession session = request.getSession();
-		session.setAttribute("Login", form);
-
-		try {
-			if (Nutzerueberpruefen(form)) {
-				response.sendRedirect("./InvestmentsAnzeigenServlet");
-			} else {
-				if (Benutzernameueberpruefen(form)) {
-					response.sendRedirect("Stacked/JSP/PasswortFalsch.jsp");
+		if (request.getCookies() == null) {
+			response.sendRedirect("./Stacked/Index.html");
+		} else {
+			try {
+				if (ProfiAnfrageUeberpruefen(request.getParameter("username"))) {
+					form.setOffeneProfiAnfrage(true);
 				} else {
-					response.sendRedirect("Stacked/JSP/BenutzernameFalsch.jsp");
-
+					form.setOffeneProfiAnfrage(false);
 				}
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			HttpSession session = request.getSession();
+			session.setAttribute("Login", form);
+
+			try {
+				if (Nutzerueberpruefen(form)) {
+					response.sendRedirect("./InvestmentsAnzeigenServlet");
+				} else {
+					if (Benutzernameueberpruefen(form)) {
+						response.sendRedirect("Stacked/JSP/PasswortFalsch.jsp");
+					} else {
+						response.sendRedirect("Stacked/JSP/BenutzernameFalsch.jsp");
+
+					}
+				}
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

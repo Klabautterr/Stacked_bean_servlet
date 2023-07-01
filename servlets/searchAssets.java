@@ -50,7 +50,6 @@ public class searchAssets extends HttpServlet implements Servlet {
 				while(rs.next()) {
 					Assets asset = new Assets();
 					asset.setStockname(rs.getString("aktien"));
-					System.out.println(rs.getString("aktien"));
 					refillDropDown.add(asset);
 				}
 			}catch (Exception e) {

@@ -67,7 +67,6 @@ public class searchETF extends HttpServlet {
 
 		try {
 			List<Assets> refillDropDown = searchToRefillETFs();
-			System.out.println(refillDropDown);
 			request.setAttribute("refillDropDown", refillDropDown);
 			final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/etfNameLoader.jsp");
 			dispatcher.forward(request, response);

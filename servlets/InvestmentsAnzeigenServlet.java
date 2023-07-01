@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Assets;
 import stacked_bs.bean.Login;
+import stacked_bs.bean.AnlageOption;
 
 
 /**
@@ -64,6 +65,24 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 
 		return assets;
 	}
+	
+	 private double calculateAssetValue(int numbOfStocks, int price) {
+	    	
+	    	int assetValue = numbOfStocks * price;
+	    	
+	    	return assetValue;
+	    }
+
+	   private double calculatePortfolioValue(List<Assets> assets, AnlageOption anlageOption) {
+		  int portfolioValue = 0;
+		  
+		  for(Assets asset : assets) {
+			  portfolioValue += calculateAssetValue(asset.getAnzahl(), anlageOption.getPreis()); 
+		  }
+		  
+		  return portfolioValue;
+	   }
+	    
 
 //<<<<<<< Updated upstream
 	private boolean Profiueberpruefen(String username) throws SQLException {
@@ -122,6 +141,7 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 		String username = login.getUsername();
 		String FollowUser = request.getParameter("username");
 		request.setAttribute("FollowUser", FollowUser);
+		AnlageOption anlage= new AnlageOption();
 
 		try {
 

@@ -67,17 +67,33 @@ public class EinPostAusgeben extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");   
 		HttpSession session = request.getSession();
 	
+
+		
 		Long id = Long.valueOf(request.getParameter("id"));
 		
 		Post post  = search(id); 
 
-		session.setAttribute("post", post);
+		//session.setAttribute("post", post);
+		request.setAttribute("post", post);
+		
 
-	        final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Kommentieren.jsp");
-	        dispatcher.forward(request, response);
+
+		String ajaxLike = "0";
+		if (request.getParameter("ajaxLike") != null) {
+			ajaxLike = (String) request.getParameter("ajaxLike");
+		}
+		
+		final RequestDispatcher dispatcher;
+		
+		if ("1".equals(ajaxLike)){
+			dispatcher = request.getRequestDispatcher("Stacked/JSP/LikeJSON.jsp");
+	     
+		}else {
+	        dispatcher = request.getRequestDispatcher("Stacked/JSP/Kommentieren.jsp");
+	       
 	    }
-	
-
+	 dispatcher.forward(request, response);
+	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

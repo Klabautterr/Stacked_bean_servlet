@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import javax.sql.DataSource;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -87,12 +88,27 @@ public class Liken extends HttpServlet {
 		Long id = Long.valueOf(request.getParameter("id"));
 		String username = login.getUsername();
 		
-	//	String 
+	
+		String ajaxLike = request.getParameter("ajaxLike");
+		if (ajaxLike == null) {
+			ajaxLike = "0";
+		}
 		
 		liken(id, username);
 			
 		
-		response.sendRedirect("./AllePostsAusgeben");
+		
+		if (ajaxLike.equals("1")) {
+			String redirectURL = "EinPostAusgeben?ajaxLike=" + ajaxLike + "&id=" + id;
+			response.sendRedirect(redirectURL);
+			
+			
+		}else {
+			final RequestDispatcher dispatcher;
+			dispatcher = request.getRequestDispatcher("/AllePostsAusgeben");
+		    dispatcher.forward(request, response);
+		}
+	
 		
 	
 	}

@@ -39,15 +39,34 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
-	private void persist(Assets assets) throws ServletException {
+	private void persistAktien(Assets assets) throws ServletException {
 
 		try (Connection con = ds.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(
-						"INSERT INTO thidb.investments (username,stockname, anzahl, buyin) VALUES(?,?,?,?)")) {
+						"INSERT INTO thidb.investments (username,stockname, anzahl, buyin,etf) VALUES(?,?,?,?,?)")) {
 			pstmt.setString(1, assets.getUsername());
 			pstmt.setString(2, assets.getStockname());
 			pstmt.setInt(3, assets.getAnzahl());
 			pstmt.setInt(4, assets.getBuyin());
+			pstmt.setBoolean(5, false);
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+
+			throw new ServletException(e.getMessage());
+		}
+	}
+	
+	private void persistETF(Assets assets) throws ServletException {
+
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(
+						"INSERT INTO thidb.investments (username,stockname, anzahl, buyin,etf) VALUES(?,?,?,?,?)")) {
+			pstmt.setString(1, assets.getUsername());
+			pstmt.setString(2, assets.getStockname());
+			pstmt.setInt(3, assets.getAnzahl());
+			pstmt.setInt(4, assets.getBuyin());
+			pstmt.setBoolean(5, true);
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -97,7 +116,7 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 		}
 	}
 	
-	
+
 	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -117,12 +136,20 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 		assets.setAnzahl(Integer.valueOf(request.getParameter("amountOfStock")));
 		assets.setBuyin(Integer.valueOf(request.getParameter("buyIn")));
 
+		String input1 = request.getParameter("input1");
 		
-
+		
 		try {
 			if (duplicateAssets(assets) == false) {
 				session.setAttribute("Assets", assets);
-				persist(assets);
+				
+				if(input1 == "0") {
+					persistETF(assets);
+				}else {
+					persistAktien(assets);
+				}
+				
+				
 
 				response.sendRedirect("./InvestmentsAnzeigenServlet");
 			} else {

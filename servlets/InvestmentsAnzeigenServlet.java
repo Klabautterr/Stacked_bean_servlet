@@ -5,8 +5,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.sql.DataSource;
 
@@ -19,9 +22,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Assets;
+import stacked_bs.bean.ETF;
 import stacked_bs.bean.Login;
-import stacked_bs.bean.AnlageOption;
-
+import stacked_bs.bean.Stock;
 
 /**
  * Servlet implementation class InvestmentsAnzeigenServlet
@@ -65,24 +68,6 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 
 		return assets;
 	}
-	
-	 private double calculateAssetValue(int numbOfStocks, int price) {
-	    	
-	    	int assetValue = numbOfStocks * price;
-	    	
-	    	return assetValue;
-	    }
-
-	   private double calculatePortfolioValue(List<Assets> assets, AnlageOption anlageOption) {
-		  int portfolioValue = 0;
-		  
-		  for(Assets asset : assets) {
-			  portfolioValue += calculateAssetValue(asset.getAnzahl(), anlageOption.getPreis()); 
-		  }
-		  
-		  return portfolioValue;
-	   }
-	    
 
 //<<<<<<< Updated upstream
 	private boolean Profiueberpruefen(String username) throws SQLException {
@@ -105,6 +90,79 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 
 		}
 		return ifProfi;
+	}
+
+	private int getAllAssets(String username) throws SQLException {
+
+		int result = 0;
+
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con
+						.prepareStatement("SELECT SUM(anzahl) as anzahl FROM thidb.investments WHERE username = ?")) {
+			pstmt.setString(1, username);
+			try (ResultSet res = pstmt.executeQuery()) {
+				if (res.next()) {
+					result = res.getInt("anzahl");
+				}
+			}
+		}
+		return result;
+	}
+
+	private double getAllETFs(String username) throws SQLException {
+
+		ETF etfs = new ETF();
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(
+						"SELECT SUM(anzahl) as anzahlETF FROM thidb.investments WHERE username = ? AND etf = 1")) {
+
+			pstmt.setString(1, username);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					if (rs.getInt("anzahlETF") != 0) {
+
+						
+						
+						int allStocks = getAllAssets(username);
+						
+						double AnzahlEtfs = rs.getInt("anzahlETF");
+						double AnzahlEtf = AnzahlEtfs * 100/ allStocks ;
+						double roundedAnzahlEtf = Math.round(AnzahlEtf * 100.0) / 100.0;
+						etfs.setAnzahlEtf(roundedAnzahlEtf);
+
+					} else {
+						etfs.setAnzahlEtf(0.0);
+					}
+
+				}
+			}
+		}
+		return etfs.getAnzahlEtf();
+	}
+
+	private double getAllStocks(String username) throws SQLException {
+		Stock stock = new Stock();
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(
+						"SELECT SUM(anzahl) as anzahlStocks FROM thidb.investments WHERE username = ? AND etf = 0")) {
+			pstmt.setString(1, username);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					if (rs.getInt("anzahlStocks") != 0) {
+						int allStocks = getAllAssets(username);
+						double AnzahlStocks = rs.getInt("anzahlStocks") * 100.0 / allStocks;
+						System.out.println(AnzahlStocks);
+						double roundedAnzahlStocks = Math.round(AnzahlStocks * 100.0) / 100.0;
+						stock.setAnzahlStock(roundedAnzahlStocks);
+
+					} else {
+						stock.setAnzahlStock(0.0);
+					}
+
+				}
+			}
+		}
+		return stock.getAnzahlStock();
 	}
 
 	private boolean Adminueberpruefen(String username) throws ServletException, SQLException {
@@ -141,7 +199,6 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 		String username = login.getUsername();
 		String FollowUser = request.getParameter("username");
 		request.setAttribute("FollowUser", FollowUser);
-		AnlageOption anlage= new AnlageOption();
 
 		try {
 
@@ -154,9 +211,12 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 			} else if (Adminueberpruefen(username)) {
 				response.sendRedirect("./Stacked/JSP/Admin.jsp");
 			} else if (Profiueberpruefen(login.getUsername()) == true) {
-				List<Assets> assetsAnzeigen = search(username);
 
+				List<Assets> assetsAnzeigen = search(username);
 				request.setAttribute("AssetsAnzeigen", assetsAnzeigen);
+
+				request.setAttribute("anzahlEtf", getAllETFs(username));
+				request.setAttribute("AnzahlStocks", getAllStocks(username));
 				login.setIsProfi(true);
 				final RequestDispatcher dispatcher = request.getRequestDispatcher("Stacked/JSP/Profi.jsp");
 				dispatcher.forward(request, response);

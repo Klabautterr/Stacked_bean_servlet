@@ -143,7 +143,7 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 			if (duplicateAssets(assets) == false) {
 				session.setAttribute("Assets", assets);
 				
-				if(input1 == "0") {
+				if(input1 == "0" || input1 == null) {
 					persistETF(assets);
 				}else {
 					persistAktien(assets);

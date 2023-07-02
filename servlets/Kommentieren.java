@@ -83,7 +83,7 @@ public class Kommentieren extends HttpServlet {
 		//request.setAttribute("id", id);
 
 		
-		response.sendRedirect("Stacked/webapp/JSP/Kommentieren.jsp");
+		response.sendRedirect("./EinPostAusgeben");
 
 	
 	}

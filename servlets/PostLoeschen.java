@@ -27,6 +27,9 @@ public class PostLoeschen extends HttpServlet {
 	/**
 	 * Default constructor.
 	 */
+	
+//Linus Baumeister
+	
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
@@ -63,7 +66,6 @@ public class PostLoeschen extends HttpServlet {
 			loeschen(id, username);
 			
 
-			//session.setAttribute("formPost", null);
 
 			// sendet an das ausgaben Servelt 
 		response.sendRedirect("./AllePostsAusgeben");
@@ -81,3 +83,5 @@ public class PostLoeschen extends HttpServlet {
 	}
 
 }
+
+//Linus Baumeister

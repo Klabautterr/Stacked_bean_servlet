@@ -28,6 +28,9 @@ public class PostAuslesen extends HttpServlet {
     /**
      * Default constructor. 
      */
+	
+//Linus Baumeister eigentlich nur das Bildauslesen aus dem Skript 
+	
 	@Resource(lookup="java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
@@ -78,3 +81,4 @@ public class PostAuslesen extends HttpServlet {
 	}
 
 }
+//Linus Baumeister

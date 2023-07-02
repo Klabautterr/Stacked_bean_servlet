@@ -30,6 +30,8 @@ public class AllePostsAusgeben extends HttpServlet {
 	/**
 	 * Default constructor.
 	 */
+	//Linus Baumeister
+	
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
@@ -66,9 +68,10 @@ public class AllePostsAusgeben extends HttpServlet {
 		List<Post> posts = new ArrayList<>();
 
 		try (Connection con = ds.getConnection();
+				// Chat GPT
 				PreparedStatement pstmt = con.prepareStatement(
 						"SELECT P.* FROM thidb.post P JOIN follow F ON P.username = F.username2 WHERE F.username1 = ? ORDER BY P.id DESC LIMIT ?, ?")) {
-
+				//Linus Baumeister
 			pstmt.setString(1, loginusername);
 			pstmt.setLong(2, schongeladen);
 			pstmt.setLong(3, id);
@@ -152,3 +155,4 @@ public class AllePostsAusgeben extends HttpServlet {
 		doGet(request, response);
 	}
 }
+//Linus Baumeister

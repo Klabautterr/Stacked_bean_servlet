@@ -24,6 +24,8 @@ import stacked_bs.bean.Login;
 public class Liken extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+//Linus Baumeister
+	
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
@@ -99,7 +101,9 @@ public class Liken extends HttpServlet {
 		
 		
 		if (ajaxLike.equals("1")) {
+			//chat GPT
 			String redirectURL = "EinPostAusgeben?ajaxLike=" + ajaxLike + "&id=" + id;
+			//Linus Bameister
 			response.sendRedirect(redirectURL);
 			
 			
@@ -124,3 +128,4 @@ public class Liken extends HttpServlet {
 	}
 
 }
+//Linus Baumeister

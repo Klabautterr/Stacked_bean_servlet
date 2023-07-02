@@ -32,6 +32,8 @@ import jakarta.servlet.http.Part;
 public class Posten extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+//Linus Baumeister
+	
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
@@ -107,3 +109,5 @@ public class Posten extends HttpServlet {
 	}
 
 }
+
+//Linus Baumeister

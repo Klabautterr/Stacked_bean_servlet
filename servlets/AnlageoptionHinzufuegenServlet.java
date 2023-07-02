@@ -65,7 +65,7 @@ public class AnlageoptionHinzufuegenServlet extends HttpServlet {
 
 	private boolean AktieSchonVorhanden(AnlageOption Aktie) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM thidb.aktien Where BINARY aktien = ?")) {
+				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM thidb.aktien Where aktien = ?")) {
 
 			pstmt.setString(1, Aktie.getName());
 
@@ -84,7 +84,7 @@ public class AnlageoptionHinzufuegenServlet extends HttpServlet {
 	
 	private boolean ETFSchonVorhanden(AnlageOption ETF) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM thidb.etf Where BINARY etf = ?")) {
+				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM thidb.etf Where etf = ?")) {
 
 			pstmt.setString(1, ETF.getName());
 

@@ -127,7 +127,7 @@ public class LoginServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 
-			HttpSession session = request.getSession();
+			HttpSession session = request.getSession(); 
 			session.setAttribute("Login", form);
 
 			try {

@@ -7,7 +7,7 @@ public class Login implements Serializable{
 	private String username;
 	private String passwort;
 	private boolean isProfi = true;
-	private boolean offeneProfiAnfrage = true;
+	private boolean offeneProfiAnfrage = false;
 	
 	
 	public String getUsername() {

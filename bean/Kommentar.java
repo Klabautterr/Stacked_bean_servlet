@@ -1,3 +1,4 @@
+//Linus Baumeister
 package stacked_bs.bean;
 
 import java.io.Serializable;
@@ -38,3 +39,4 @@ public class Kommentar implements Serializable{
 	
 
 }
+//Linus Baumeister

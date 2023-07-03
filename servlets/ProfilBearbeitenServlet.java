@@ -176,6 +176,7 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		String AlterUsername = login.getUsername();
 		Login form = new Login();
 		form.setUsername(request.getParameter("NeuerUsername"));
+		
 			
 		try {
 			if(Benutzernameueberpruefen(form)){

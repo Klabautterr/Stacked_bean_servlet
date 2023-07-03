@@ -21,9 +21,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Assets;
 
-/**
- * Servlet implementation class searchAssets
- */
+
+//Tobias Weiß
+
 @WebServlet("/searchAssets")
 public class searchAssets extends HttpServlet implements Servlet {
 	private static final long serialVersionUID = 1L;
@@ -90,3 +90,4 @@ public class searchAssets extends HttpServlet implements Servlet {
 	}
 
 }
+//Tobias Weiß

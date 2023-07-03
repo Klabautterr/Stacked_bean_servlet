@@ -21,9 +21,9 @@ import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Assets;
 import stacked_bs.bean.Login;
 
-/**
- * Tobias Weiß -> Hier ist noch nix geschehen wird es aber bald
- */
+
+//Tobias Weiß
+
 @WebServlet("/InvestmentsServlet")
 public class InvestmentsServlet extends HttpServlet implements Servlet {
 	private static final long serialVersionUID = 1L;
@@ -183,3 +183,4 @@ public class InvestmentsServlet extends HttpServlet implements Servlet {
 	}
 
 }
+//Tobias Weiß

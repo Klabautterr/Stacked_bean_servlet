@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Login;
 
+//Tobias Weiß
+
 /**
  * Servlet implementation class deleteServlet
  */
@@ -84,3 +86,4 @@ public class deleteInvestment extends HttpServlet {
 	}
 
 }
+//Tobias Weiß

@@ -1,7 +1,7 @@
 package stacked_bs.bean;
 
 import java.io.Serializable;
-
+//Tobias Weiß
 public class Stock implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -16,3 +16,4 @@ public class Stock implements Serializable{
 	}
 	
 }
+//Tobias Weiß

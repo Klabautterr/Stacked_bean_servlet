@@ -26,6 +26,8 @@ import stacked_bs.bean.ETF;
 import stacked_bs.bean.Login;
 import stacked_bs.bean.Stock;
 
+//Tobias Weiß
+
 /**
  * Servlet implementation class InvestmentsAnzeigenServlet
  */
@@ -165,6 +167,9 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 		return stock.getAnzahlStock();
 	}
 
+	//Tobias Weiß
+	
+	//Jonathan Vielwerth
 	private boolean Adminueberpruefen(String username) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();
 				PreparedStatement pstmt = con
@@ -184,11 +189,10 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 		}
 
 	}
+	// Jonathan Vielwerth
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
+	//doGet Zusammenfürhung der Funktionen von Jonathan Vielwerth & Tobias Weiß
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 

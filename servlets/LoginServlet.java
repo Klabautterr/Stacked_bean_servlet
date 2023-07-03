@@ -12,16 +12,13 @@ import stacked_bs.bean.Login;
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 // Jonathan Vielwerth
 
-/**
- * Servlet implementation class LoginServlet
- */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -29,19 +26,9 @@ public class LoginServlet extends HttpServlet {
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
-	/**
-	 * Default constructor.
-	 */
-
 	public LoginServlet() {
 		// TODO Auto-generated constructor stub
 	}
-
-	/**
-	 * @throws SQLException
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 
 	private boolean Nutzerueberpruefen(Login form) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();
@@ -127,7 +114,7 @@ public class LoginServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 
-			HttpSession session = request.getSession(); 
+			HttpSession session = request.getSession();
 			session.setAttribute("Login", form);
 
 			try {
@@ -154,10 +141,6 @@ public class LoginServlet extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub

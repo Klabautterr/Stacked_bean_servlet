@@ -1,7 +1,6 @@
 package stacked_bs.servlets;
 
 import stacked_bs.bean.AnlageOption;
-import stacked_bs.bean.Registrierung;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -17,11 +16,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
-/**
- * Servlet implementation class AnlageoptionHinzufuegenServlet
- */
+//Jonathan Vielwerth
+
 @WebServlet("/AnlageoptionHinzufuegenServlet")
 public class AnlageoptionHinzufuegenServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -29,9 +26,6 @@ public class AnlageoptionHinzufuegenServlet extends HttpServlet {
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
-	/**
-	 * Default constructor.
-	 */
 	public AnlageoptionHinzufuegenServlet() {
 		// TODO Auto-generated constructor stub
 	}
@@ -81,7 +75,7 @@ public class AnlageoptionHinzufuegenServlet extends HttpServlet {
 		}
 
 	}
-	
+
 	private boolean ETFSchonVorhanden(AnlageOption ETF) throws ServletException, SQLException {
 		try (Connection con = ds.getConnection();
 				PreparedStatement pstmt = con.prepareStatement("SELECT * FROM thidb.etf Where etf = ?")) {
@@ -156,10 +150,6 @@ public class AnlageoptionHinzufuegenServlet extends HttpServlet {
 
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -167,3 +157,4 @@ public class AnlageoptionHinzufuegenServlet extends HttpServlet {
 	}
 
 }
+//Jonathan Vielwerth

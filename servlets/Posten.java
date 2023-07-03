@@ -1,13 +1,11 @@
 package stacked_bs.servlets;
 
-import java.util.ArrayList;
 import stacked_bs.bean.Login;
 import stacked_bs.bean.Post;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List;
 
 import javax.sql.DataSource;
 

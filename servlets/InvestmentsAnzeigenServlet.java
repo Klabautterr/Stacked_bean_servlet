@@ -5,11 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.sql.DataSource;
 
@@ -153,7 +150,6 @@ public class InvestmentsAnzeigenServlet extends HttpServlet {
 					if (rs.getInt("anzahlStocks") != 0) {
 						int allStocks = getAllAssets(username);
 						double AnzahlStocks = rs.getInt("anzahlStocks") * 100.0 / allStocks;
-						System.out.println(AnzahlStocks);
 						double roundedAnzahlStocks = Math.round(AnzahlStocks * 100.0) / 100.0;
 						stock.setAnzahlStock(roundedAnzahlStocks);
 

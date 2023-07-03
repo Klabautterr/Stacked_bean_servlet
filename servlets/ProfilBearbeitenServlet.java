@@ -18,11 +18,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import stacked_bs.bean.Login;
+
 // Jonathan Vielwerth
 
-/**
- * Servlet implementation class ProfilBearbeitenServlet
- */
 @WebServlet("/ProfilBearbeitenServlet")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 public class ProfilBearbeitenServlet extends HttpServlet {
@@ -31,9 +29,6 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
-	/**
-	 * Default constructor.
-	 */
 	public ProfilBearbeitenServlet() {
 		// TODO Auto-generated constructor stub
 	}
@@ -57,10 +52,11 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		}
 		if (form.getUsername().equals("") & form.getPasswort().equals("") & filepart.getSize() != 0) {
 			try (Connection con = ds.getConnection();
-					PreparedStatement pstmt = con.prepareStatement("UPDATE thidb.user SET userImage = ? Where username = ?")) {
+					PreparedStatement pstmt = con
+							.prepareStatement("UPDATE thidb.user SET userImage = ? Where username = ?")) {
 				pstmt.setBinaryStream(1, filepart.getInputStream());
 				pstmt.setString(2, AlterUsername);
-				
+
 				pstmt.executeUpdate();
 
 			} catch (Exception ex) {
@@ -70,7 +66,8 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		}
 		if (form.getUsername().equals("") & !form.getPasswort().equals("") & filepart.getSize() == 0) {
 			try (Connection con = ds.getConnection();
-					PreparedStatement pstmt = con.prepareStatement("UPDATE thidb.user SET passwort = ? Where username = ?")) {
+					PreparedStatement pstmt = con
+							.prepareStatement("UPDATE thidb.user SET passwort = ? Where username = ?")) {
 				pstmt.setString(1, form.getPasswort());
 				pstmt.setString(2, AlterUsername);
 
@@ -79,13 +76,13 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 			} catch (Exception ex) {
 				throw new ServletException(ex.getMessage());
 			}
-			
 
 		}
-		
+
 		if (!form.getUsername().equals("") & form.getPasswort().equals("") & filepart.getSize() == 0) {
 			try (Connection con = ds.getConnection();
-					PreparedStatement pstmt = con.prepareStatement("UPDATE thidb.user SET username = ? Where username = ?")) {
+					PreparedStatement pstmt = con
+							.prepareStatement("UPDATE thidb.user SET username = ? Where username = ?")) {
 				pstmt.setString(1, form.getUsername());
 				pstmt.setString(2, AlterUsername);
 
@@ -96,10 +93,11 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 			}
 
 		}
-		
+
 		if (!form.getUsername().equals("") & !form.getPasswort().equals("") & filepart.getSize() == 0) {
 			try (Connection con = ds.getConnection();
-					PreparedStatement pstmt = con.prepareStatement("UPDATE thidb.user SET username = ?, passwort = ? Where username = ?")) {
+					PreparedStatement pstmt = con
+							.prepareStatement("UPDATE thidb.user SET username = ?, passwort = ? Where username = ?")) {
 				pstmt.setString(1, form.getUsername());
 				pstmt.setString(2, form.getPasswort());
 				pstmt.setString(3, AlterUsername);
@@ -114,7 +112,8 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 
 		if (!form.getUsername().equals("") & form.getPasswort().equals("") & filepart.getSize() != 0) {
 			try (Connection con = ds.getConnection();
-					PreparedStatement pstmt = con.prepareStatement("UPDATE thidb.user SET username = ?, userImage = ? Where username = ?")) {
+					PreparedStatement pstmt = con
+							.prepareStatement("UPDATE thidb.user SET username = ?, userImage = ? Where username = ?")) {
 				pstmt.setString(1, form.getUsername());
 				pstmt.setBinaryStream(2, filepart.getInputStream());
 				;
@@ -129,7 +128,8 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		}
 		if (form.getUsername().equals("") & !form.getPasswort().equals("") & filepart.getSize() != 0) {
 			try (Connection con = ds.getConnection();
-					PreparedStatement pstmt = con.prepareStatement("UPDATE user SET passwort = ?, userImage = ? Where username = ?")) {
+					PreparedStatement pstmt = con
+							.prepareStatement("UPDATE user SET passwort = ?, userImage = ? Where username = ?")) {
 				pstmt.setString(1, form.getPasswort());
 				pstmt.setBinaryStream(2, filepart.getInputStream());
 				;
@@ -162,10 +162,7 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		}
 
 	}
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -176,24 +173,23 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 		String AlterUsername = login.getUsername();
 		Login form = new Login();
 		form.setUsername(request.getParameter("NeuerUsername"));
-		
-			
+
 		try {
-			if(Benutzernameueberpruefen(form)){
-				response.sendRedirect("Stacked/JSP/BearbeitungNichtMoeglich.jsp");	
+			if (Benutzernameueberpruefen(form)) {
+				response.sendRedirect("Stacked/JSP/BearbeitungNichtMoeglich.jsp");
 				form.setUsername(AlterUsername);
 				session.setAttribute("Login", form);
 			}
-				
+
 		} catch (ServletException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		if(form.getUsername().equals("")){
+
+		if (form.getUsername().equals("")) {
 			form.setUsername(AlterUsername);
 		}
-		
+
 		form.setPasswort(request.getParameter("passwort"));
 		Part filepart = request.getPart("NewImage");
 
@@ -202,13 +198,8 @@ public class ProfilBearbeitenServlet extends HttpServlet {
 
 		response.sendRedirect("./InvestmentsAnzeigenServlet");
 
-		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub

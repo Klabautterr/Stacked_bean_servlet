@@ -13,26 +13,22 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class AnlageoptionLoeschen
- */
+//Jonathan Vielwerth
+
 @WebServlet("/AnlageoptionLoeschen")
 public class AnlageoptionLoeschen extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
-    /**
-     * Default constructor. 
-     */
-    public AnlageoptionLoeschen() {
-        // TODO Auto-generated constructor stub
-    }
-    
-    public void aktieLoeschen(String AktienName)throws ServletException{
-    	try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con.prepareStatement(
-						"DELETE from thidb.aktien WHERE aktien = ?")) {
+
+	public AnlageoptionLoeschen() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public void aktieLoeschen(String AktienName) throws ServletException {
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con.prepareStatement("DELETE from thidb.aktien WHERE aktien = ?")) {
 			pstmt.setString(1, AktienName);
 
 			pstmt.executeUpdate();
@@ -40,12 +36,11 @@ public class AnlageoptionLoeschen extends HttpServlet {
 		} catch (Exception ex) {
 			throw new ServletException(ex.getMessage());
 		}
-    }
-    
-    public void etfLoeschen(String ETFName)throws ServletException{
-    	try (Connection con = ds.getConnection();
-				PreparedStatement pstmt = con.prepareStatement(
-						"DELETE from thidb.etf WHERE etf = ?")) {
+	}
+
+	public void etfLoeschen(String ETFName) throws ServletException {
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con.prepareStatement("DELETE from thidb.etf WHERE etf = ?")) {
 			pstmt.setString(1, ETFName);
 
 			pstmt.executeUpdate();
@@ -53,30 +48,27 @@ public class AnlageoptionLoeschen extends HttpServlet {
 		} catch (Exception ex) {
 			throw new ServletException(ex.getMessage());
 		}
-    }
+	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String AktienName = request.getParameter("AktieLoeschen");
 		String ETFName = request.getParameter("ETFLoeschen");
-		
-		if(!(AktienName == null)) {
+
+		if (!(AktienName == null)) {
 			aktieLoeschen(AktienName);
 		} else {
 			etfLoeschen(ETFName);
 		}
 		response.sendRedirect("./AnlageoptionenVerwaltenServlet");
-		
+
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
 }
+//Jonathan Vielwerth

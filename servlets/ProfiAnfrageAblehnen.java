@@ -15,9 +15,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Login;
 
-/**
- * Servlet implementation class ProfiAnfrageAblehnen
- */
+//Jonathan Vielwerth
+
 @WebServlet("/ProfiAnfrageAblehnen")
 public class ProfiAnfrageAblehnen extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -25,9 +24,6 @@ public class ProfiAnfrageAblehnen extends HttpServlet {
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 
-	/**
-	 * Default constructor.
-	 */
 	public ProfiAnfrageAblehnen() {
 		// TODO Auto-generated constructor stub
 	}
@@ -45,19 +41,15 @@ public class ProfiAnfrageAblehnen extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		request.setCharacterEncoding("UTF-8");
 
 		HttpSession session = request.getSession();
-		Login login = (Login) session.getAttribute("Login");		
+		Login login = (Login) session.getAttribute("Login");
 		login.setOffeneProfiAnfrage(false);
-		
+
 		String username = request.getParameter("username");
 
 		persist(username);
@@ -65,10 +57,6 @@ public class ProfiAnfrageAblehnen extends HttpServlet {
 		response.sendRedirect("./ProfiAnfragenAusgeben");
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -76,3 +64,4 @@ public class ProfiAnfrageAblehnen extends HttpServlet {
 	}
 
 }
+//Jonathan Vielwerth

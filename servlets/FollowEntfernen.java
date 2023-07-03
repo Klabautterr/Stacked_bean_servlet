@@ -15,11 +15,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Login;
-import stacked_bs.bean.Profi;
 
-/**
- * Servlet implementation class FollowEntfernen
- */
+//Jonathan Vielwerth
+
 @WebServlet("/FollowEntfernen")
 public class FollowEntfernen extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -47,7 +45,7 @@ public class FollowEntfernen extends HttpServlet {
 			throw new ServletException(ex.getMessage());
 		}
 	}
-	
+
 	public void followerEntfernen(String eingeloggterNutzer, String andererNutzer) throws ServletException {
 		try (Connection con = ds.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(
@@ -64,17 +62,18 @@ public class FollowEntfernen extends HttpServlet {
 
 	public String getUsername1(String eingeloggterNutzer, String andererNutzer) throws ServletException {
 
-		String username = null; 
-		try (Connection con = ds.getConnection(); 	
+		String username = null;
+		try (Connection con = ds.getConnection();
 				PreparedStatement pstmt = con
 						.prepareStatement("SELECT username1 FROM thidb.follow WHERE username2 = ? AND username1 = ?")) {
 			pstmt.setString(1, eingeloggterNutzer);
 			pstmt.setString(2, andererNutzer);
 
 			try (ResultSet rs = pstmt.executeQuery()) {
-				while(rs.next()) {
-				username = rs.getString("username1");
-			}}
+				while (rs.next()) {
+					username = rs.getString("username1");
+				}
+			}
 		} catch (Exception ex) {
 			throw new ServletException(ex.getMessage());
 		}
@@ -114,3 +113,4 @@ public class FollowEntfernen extends HttpServlet {
 	}
 
 }
+//Jonathan Vielwerth

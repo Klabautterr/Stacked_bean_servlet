@@ -2,7 +2,6 @@ package stacked_bs.servlets;
 
 import java.io.IOException;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -17,39 +16,34 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Login;
 
+//Jonathan Vielwerth
 
-/**
- * Servlet implementation class ProfiAnfrageStellen
- */
 @WebServlet("/ProfiAnfrageStellen")
 public class ProfiAnfrageStellen extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
-    /**
-     * Default constructor. 
-     */
-    public ProfiAnfrageStellen() {
-        // TODO Auto-generated constructor stub
-    }
 
-    public void persist(Login login) throws ServletException {
-    	try(Connection con = ds.getConnection();
-    			PreparedStatement pstmt = con.prepareStatement("Update thidb.user Set offeneProfiAnfrage = true where username = ?")){
-    		pstmt.setString(1, login.getUsername());
-    		
-    		pstmt.executeUpdate();
+	public ProfiAnfrageStellen() {
+		// TODO Auto-generated constructor stub
+	}
 
-    		
-    	}catch (Exception ex) {
-    		throw new ServletException(ex.getMessage());
-    	}
-    }
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void persist(Login login) throws ServletException {
+		try (Connection con = ds.getConnection();
+				PreparedStatement pstmt = con
+						.prepareStatement("Update thidb.user Set offeneProfiAnfrage = true where username = ?")) {
+			pstmt.setString(1, login.getUsername());
+
+			pstmt.executeUpdate();
+
+		} catch (Exception ex) {
+			throw new ServletException(ex.getMessage());
+		}
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
 		Login login = (Login) session.getAttribute("Login");
@@ -59,12 +53,11 @@ public class ProfiAnfrageStellen extends HttpServlet {
 		response.sendRedirect("./Stacked/JSP/ProfilBearbeiten.jsp");
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
 }
+//Jonathan Vielwerth

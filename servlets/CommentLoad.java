@@ -78,7 +78,6 @@ public class CommentLoad extends HttpServlet {
 		Long alrLoadedComments = Long.valueOf(request.getParameter("loadedComments"));
 
 		List<Kommentar> comments = LoadComment(postID, 5L, alrLoadedComments);
-		System.out.println(comments);
 		request.setAttribute("comments", comments);
 		
 		final RequestDispatcher dispatcher;

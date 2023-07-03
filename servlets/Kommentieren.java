@@ -40,14 +40,14 @@ public class Kommentieren extends HttpServlet {
     	String[] DataInfo = new String[] {"id"};
     	
     	try (Connection con = ds.getConnection();
-    			// schreibt die Daten in die DAtenbank 
+    			// schreibt die Daten in die Datenbank 
     		PreparedStatement pstmt = con.prepareStatement(
     		"INSERT INTO thidb.Kommentare (post_id, kommentar, username) Values(?, ?, ?)", DataInfo)) {
     		pstmt.setLong(1, einKommentar.getPost_id());
     		pstmt.setString(2, einKommentar.getKommentar());
     		pstmt.setString(3, einKommentar.getUsername());
     		
-    		//pstmt.setBinaryStream(4, filepart.getInputStream());
+    		
     		pstmt.executeUpdate();
     	
     	try(ResultSet rs = pstmt.getGeneratedKeys()) {
@@ -83,16 +83,13 @@ public class Kommentieren extends HttpServlet {
 
 		request.setAttribute("comments", postedComment);
 		ein_Kommentar(formKommentar);
-		System.out.println(formKommentar);
 		
-		//Long id = Long.valueOf(request.getParameter("id"));
 		
-		//request.setAttribute("id", id);
 
 		final RequestDispatcher dispatcher;
 		dispatcher = request.getRequestDispatcher("Stacked/JSP/CommentToJSON.jsp");
 		dispatcher.forward(request, response);
-		//response.sendRedirect("Stacked/JSP/Kommentieren.jsp");
+		
 
 	
 	}

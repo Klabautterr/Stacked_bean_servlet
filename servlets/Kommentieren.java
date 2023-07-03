@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
 
 import javax.sql.DataSource;
 
 import stacked_bs.bean.Kommentar;
 import jakarta.annotation.Resource;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,6 +22,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import stacked_bs.bean.Login;
 import stacked_bs.bean.Post;
+import stacked_bs.bean.Kommentar;
 
 /**
  * Servlet implementation class Kommentieren
@@ -72,18 +77,22 @@ public class Kommentieren extends HttpServlet {
 		formKommentar.setKommentar(request.getParameter("kommentar"));
 		formKommentar.setPost_id(Integer.valueOf(request.getParameter("id")));
 	
-	
+		List<Kommentar> postedComment = new ArrayList<>();
+		postedComment.add(formKommentar);
 		
 
-		session.setAttribute("formKommentar", formKommentar);
+		request.setAttribute("comments", postedComment);
 		ein_Kommentar(formKommentar);
+		System.out.println(formKommentar);
 		
 		//Long id = Long.valueOf(request.getParameter("id"));
 		
 		//request.setAttribute("id", id);
 
-		
-		response.sendRedirect("Stacked/JSP/Kommentieren.jsp");
+		final RequestDispatcher dispatcher;
+		dispatcher = request.getRequestDispatcher("Stacked/JSP/CommentToJSON.jsp");
+		dispatcher.forward(request, response);
+		//response.sendRedirect("Stacked/JSP/Kommentieren.jsp");
 
 	
 	}

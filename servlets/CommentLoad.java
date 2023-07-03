@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Login;
-import stacked_bs.bean.Post;
 import stacked_bs.bean.Kommentar;
 import javax.sql.DataSource;
 

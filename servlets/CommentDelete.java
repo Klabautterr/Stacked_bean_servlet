@@ -34,7 +34,7 @@ public class CommentDelete extends HttpServlet {
     	try (Connection con = ds.getConnection()) {
 
 			try (PreparedStatement pstmt = con
-					.prepareStatement("DELETE FROM thidb.Kommentar WHERE id = ? AND BINARY username = ?")) {
+					.prepareStatement("DELETE FROM thidb.kommentare WHERE id = ? AND BINARY username = ?")) {
 				pstmt.setLong(1, id);
 				pstmt.setString(2, username);
 				pstmt.executeUpdate();
@@ -59,7 +59,7 @@ public class CommentDelete extends HttpServlet {
 
 		
 		DeleteComment(id, username);
-		response.sendRedirect("./Kommentieren");
+		response.sendRedirect("Stacked/JSP/Kommentieren.jsp");
 	}
 
 	/**

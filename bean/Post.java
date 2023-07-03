@@ -1,7 +1,9 @@
-//Linus Baumeister
+
 package stacked_bs.bean;
 
 import java.io.Serializable;
+
+//Linus Baumeister
 
 public class Post implements Serializable{
 	private static final long serialVersionUID = 1L;

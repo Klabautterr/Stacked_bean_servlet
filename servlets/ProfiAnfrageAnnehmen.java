@@ -71,4 +71,4 @@ public class ProfiAnfrageAnnehmen extends HttpServlet {
 	}
 
 }
-//Jonathan
+//Jonathan Vielwerth 

@@ -72,3 +72,4 @@ public class CommentDelete extends HttpServlet {
 	}
 
 }
+//Jan Holtmann

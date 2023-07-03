@@ -105,3 +105,4 @@ public class Kommentieren extends HttpServlet {
 	}
 
 }
+//Jan Holtmann & Linus Baumeister

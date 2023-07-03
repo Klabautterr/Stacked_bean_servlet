@@ -2,6 +2,8 @@ package stacked_bs.bean;
 
 import java.io.Serializable;
 
+//Jonathan Vielwerth
+
 public class Login implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String username;
@@ -33,12 +35,7 @@ public class Login implements Serializable{
 	}
 	public void setOffeneProfiAnfrage(boolean offeneProfiAnfrage) {
 		this.offeneProfiAnfrage = offeneProfiAnfrage;
-	}
-
-
-
-	
-
-		
+	}	
 
 }
+//Jonathan Vielwerth

@@ -2,6 +2,8 @@ package stacked_bs.bean;
 
 import java.io.Serializable;
 
+//Jonathan Vielwerth
+
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String username;
@@ -14,3 +16,4 @@ public class User implements Serializable{
 	}
 
 }
+//Jonathan Vielwerth

@@ -27,6 +27,8 @@ import stacked_bs.bean.Kommentar;
 /**
  * Servlet implementation class Kommentieren
  */
+//Jan Holtmann & Linus Baumeister
+
 @WebServlet("/Kommentieren")
 public class Kommentieren extends HttpServlet {
 	private static final long serialVersionUID = 1L;

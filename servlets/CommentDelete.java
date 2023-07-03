@@ -13,13 +13,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import stacked_bs.bean.Login;
-import stacked_bs.bean.Post;
 import javax.sql.DataSource;
 
 /**
  * Servlet implementation class CommentDelete
  */
 @WebServlet("/CommentDelete")
+// Jan Holtmann
+
 public class CommentDelete extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

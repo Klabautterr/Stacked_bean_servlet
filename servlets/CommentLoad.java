@@ -23,6 +23,8 @@ import javax.sql.DataSource;
  * Servlet implementation class CommentLoad
  */
 @WebServlet("/CommentLoad")
+// Jan Holtmann
+
 public class CommentLoad extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

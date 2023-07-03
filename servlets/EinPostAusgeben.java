@@ -27,6 +27,7 @@ import stacked_bs.bean.Post;
 public class EinPostAusgeben extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+//Linus Baueister
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 	
@@ -77,10 +78,10 @@ public class EinPostAusgeben extends HttpServlet {
 		//request.setAttribute("post", post);
 		
 
-
+		// hab hier (String) entfernt vill hats was zerhauen
 		String ajaxLike = "0";
 		if (request.getParameter("ajaxLike") != null) {
-			ajaxLike = (String) request.getParameter("ajaxLike");
+			ajaxLike = request.getParameter("ajaxLike");
 		}
 		
 		final RequestDispatcher dispatcher;
@@ -104,3 +105,4 @@ public class EinPostAusgeben extends HttpServlet {
 	}
 
 }
+//Linus Baumseister

@@ -18,9 +18,9 @@ public class LogoutServlet extends HttpServlet {
     /**
      * Default constructor. 
      */
-    public LogoutServlet() {
+  //  public LogoutServlet() {
         // TODO Auto-generated constructor stub
-    }
+ //   }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)

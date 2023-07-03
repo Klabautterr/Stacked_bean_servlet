@@ -73,8 +73,8 @@ public class EinPostAusgeben extends HttpServlet {
 		
 		Post post  = search(id); 
 
-		//session.setAttribute("post", post);
-		request.setAttribute("post", post);
+		session.setAttribute("post", post);
+		//request.setAttribute("post", post);
 		
 
 
@@ -87,12 +87,13 @@ public class EinPostAusgeben extends HttpServlet {
 		
 		if ("1".equals(ajaxLike)){
 			dispatcher = request.getRequestDispatcher("Stacked/JSP/LikeJSON.jsp");
+			dispatcher.forward(request, response);
 	     
 		}else {
-	        dispatcher = request.getRequestDispatcher("Stacked/JSP/Kommentieren.jsp");
+	        response.sendRedirect("Stacked/JSP/Kommentieren.jsp");
 	       
 	    }
-	 dispatcher.forward(request, response);
+	 
 	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

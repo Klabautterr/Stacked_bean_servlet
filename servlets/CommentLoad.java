@@ -37,7 +37,7 @@ public class CommentLoad extends HttpServlet {
         List<Kommentar> coms = new ArrayList<>();
         
         try (Connection con = ds.getConnection();
-   	         PreparedStatement pstmt = con.prepareStatement("SELECT * FROM kommentare WHERE post_id = ? ORDER BY id DESC LIMIT ?, ?")) {
+   	         PreparedStatement pstmt = con.prepareStatement("SELECT * FROM thidb.kommentare WHERE post_id = ? ORDER BY id DESC LIMIT ?, ?")) {
 
         	pstmt.setLong(1, postID);
    	        pstmt.setLong(2, offset);
@@ -74,14 +74,12 @@ public class CommentLoad extends HttpServlet {
 		String loginUsername = login.getUsername();
 		request.setAttribute("loginUsername", loginUsername);
 
-		Long schongeladen = 0L;
+		
 		Long postID = Long.valueOf(request.getParameter("postID"));
-		if (request.getParameter("schongeladen") != null) {
-			schongeladen = Long.valueOf(request.getParameter("schongeladen"));
-		}
+		Long alrLoadedComments = Long.valueOf(request.getParameter("loadedComments"));
 
-		List<Kommentar> comments = LoadComment(postID, 5L, schongeladen);
-
+		List<Kommentar> comments = LoadComment(postID, 5L, alrLoadedComments);
+		System.out.println(comments);
 		request.setAttribute("comments", comments);
 		
 		final RequestDispatcher dispatcher;

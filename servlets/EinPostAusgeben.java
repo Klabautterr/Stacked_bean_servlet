@@ -27,7 +27,8 @@ import stacked_bs.bean.Post;
 public class EinPostAusgeben extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-//Linus Baueister
+//Linus Baumeister
+	
 	@Resource(lookup = "java:jboss/datasources/MySqlThidbDS")
 	private DataSource ds;
 	
@@ -75,10 +76,8 @@ public class EinPostAusgeben extends HttpServlet {
 		Post post  = search(id); 
 
 		session.setAttribute("post", post);
-		//request.setAttribute("post", post);
-		
 
-		// hab hier (String) entfernt vill hats was zerhauen
+		
 		String ajaxLike = "0";
 		if (request.getParameter("ajaxLike") != null) {
 			ajaxLike = request.getParameter("ajaxLike");
